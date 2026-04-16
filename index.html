@@ -2519,6 +2519,21 @@ function render() {
     // Build tool pill tags
     const toolsHtml = r.tools.map(t => `<span class="tool-tag">${t}</span>`).join('');
 
+    // Compute the actual calendar date for today's use-by day
+    // e.g. if today is Tuesday and use-by is "Thursday", find next Thursday's date
+    const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    function getDateForDay(dayName) {
+      const targetIdx = DAYS.indexOf(dayName);
+      if (targetIdx === -1) return ''; // handles special cases like "30 Days from Make Day"
+      const today = new Date();
+      const todayIdx = today.getDay();
+      let diff = targetIdx - todayIdx;
+      if (diff < 0) diff += 7; // wrap to next week if the day has already passed
+      const target = new Date(today);
+      target.setDate(today.getDate() + diff);
+      return target.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' });
+    }
+
     // Full card template — .open class on the wrapper controls detail panel visibility
     // and the left-border color transition (yellow → orange) via CSS
     return `
@@ -2530,7 +2545,7 @@ function render() {
         <div class="card-meta">
           <div class="meta-tag"><div class="dot"></div> ⏱ ${r.prepTime}</div>
           <div class="meta-tag"><div class="dot"></div> 📅 Rev. ${r.revised}</div>
-          ${todayShelf ? `<div class="meta-tag"><div class="dot" style="background:var(--orange)"></div> Use by: <b>${todayShelf.use}</b></div>` : ''}
+          ${todayShelf ? `<div class="meta-tag"><div class="dot" style="background:var(--orange)"></div> Use by: <b>${todayShelf.use}${getDateForDay(todayShelf.use) ? ' · ' + getDateForDay(todayShelf.use) : ''}</b></div>` : ''}
         </div>
         <div class="card-detail">
           ${hasBatches ? `<div class="section"><div class="section-title">Batch Size</div>${batchBtns}</div>` : ''}
