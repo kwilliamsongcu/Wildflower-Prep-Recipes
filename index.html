@@ -1,0 +1,2233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Wildflower Prep Recipes</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1a4a2e;
+    --green-mid: #2d6e47;
+    --green-light: #4caf7a;
+    --cream: #f5f0e8;
+    --warm-white: #faf8f4;
+    --amber: #d4831a;
+    --amber-light: #f0a830;
+    --red-warn: #c0392b;
+    --text-dark: #1a1a14;
+    --text-mid: #4a4a3a;
+    --text-light: #8a8a7a;
+    --border: #ddd8cc;
+    --card-bg: #ffffff;
+    --shadow: 0 2px 12px rgba(26,74,46,0.10);
+    --shadow-lg: 0 6px 30px rgba(26,74,46,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .header {
+    background: var(--green);
+    color: var(--cream);
+    padding: 20px 18px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .logo-mark {
+    width: 36px; height: 36px;
+    background: var(--amber);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1.5px;
+    line-height: 1;
+  }
+  .brand span { color: var(--amber-light); }
+  .sub-brand {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.65);
+    margin-top: 2px;
+  }
+
+  .search-bar { position: relative; }
+  .search-bar input {
+    width: 100%;
+    padding: 11px 14px 11px 40px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255,255,255,0.13);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    outline: none;
+  }
+  .search-bar input::placeholder { color: rgba(245,240,232,0.5); }
+  .search-bar input:focus { background: rgba(255,255,255,0.2); }
+  .search-icon {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    color: rgba(245,240,232,0.55);
+    font-size: 16px; pointer-events: none;
+  }
+  .clear-btn {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    color: rgba(245,240,232,0.6);
+    font-size: 18px; cursor: pointer; display: none;
+    background: none; border: none;
+    line-height: 1;
+  }
+
+  .filter-row {
+    background: var(--warm-white);
+    padding: 10px 14px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--border);
+    scrollbar-width: none;
+  }
+  .filter-row::-webkit-scrollbar { display: none; }
+  .filter-chip {
+    flex-shrink: 0;
+    padding: 5px 13px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: white;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .filter-chip.active {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+  }
+
+  .count-bar {
+    padding: 10px 16px 4px;
+    font-size: 12px;
+    color: var(--text-light);
+    letter-spacing: 0.5px;
+  }
+
+  .recipe-list {
+    padding: 4px 12px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .recipe-card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.1s;
+    border: 1px solid var(--border);
+  }
+  .recipe-card:active { transform: scale(0.985); box-shadow: none; }
+
+  .card-header {
+    padding: 14px 16px 12px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .card-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.8px;
+    color: var(--green);
+    line-height: 1.1;
+    flex: 1;
+  }
+  .card-chevron {
+    color: var(--text-light);
+    font-size: 18px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    transition: transform 0.25s;
+  }
+  .recipe-card.open .card-chevron { transform: rotate(90deg); }
+
+  .card-meta {
+    display: flex;
+    gap: 10px;
+    padding: 0 16px 13px;
+    flex-wrap: wrap;
+  }
+  .meta-tag {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 11px; color: var(--text-light); font-weight: 500;
+  }
+  .meta-tag .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green-light);
+    flex-shrink: 0;
+  }
+
+  .card-detail {
+    display: none;
+    border-top: 1px solid var(--border);
+    background: var(--warm-white);
+  }
+  .recipe-card.open .card-detail { display: block; }
+
+  .section {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:last-child { border-bottom: none; }
+  .section-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 10px;
+  }
+
+  .batch-selector {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .batch-btn {
+    flex: 1;
+    padding: 8px 4px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-mid);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .batch-btn.active {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+  }
+
+  .ing-table { width: 100%; border-collapse: collapse; }
+  .ing-table th {
+    text-align: left;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    padding: 0 0 6px;
+  }
+  .ing-table td {
+    padding: 7px 8px 7px 0;
+    font-size: 14px;
+    border-top: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .ing-table td:first-child { color: var(--text-mid); }
+  .ing-table td.part-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 1px;
+    color: var(--amber); text-transform: uppercase;
+    white-space: nowrap; padding-right: 6px; width: 1%;
+    padding-top: 9px;
+  }
+  .ing-amount {
+    font-weight: 600; color: var(--green);
+    white-space: nowrap;
+  }
+
+  .yield-box {
+    background: var(--green);
+    color: white;
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .yield-big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 1px;
+    line-height: 1;
+    color: var(--amber-light);
+  }
+  .yield-orders { font-size: 12px; color: rgba(255,255,255,0.75); }
+
+  .step {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+  .step:last-child { margin-bottom: 0; }
+  .step-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--green);
+    color: white;
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .step-text {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--text-dark);
+    flex: 1;
+  }
+  .step-text .warning {
+    color: var(--red-warn);
+    font-weight: 600;
+  }
+
+  .shelf-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .shelf-row { display: contents; }
+  .shelf-cell {
+    padding: 8px 12px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    background: white;
+  }
+  .shelf-cell.header {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--text-light);
+    background: #f0ede7;
+  }
+  .shelf-cell.today-make { background: #e8f4ee; font-weight: 700; color: var(--green); }
+  .shelf-cell.today-use { background: #e8f4ee; font-weight: 700; color: var(--green); }
+
+  .tools-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tool-tag {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 12px;
+    color: var(--text-mid);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 30px;
+    color: var(--text-light);
+  }
+  .empty-state .emoji { font-size: 40px; margin-bottom: 12px; }
+  .empty-state p { font-size: 15px; }
+
+  .today-badge {
+    display: inline-block;
+    background: var(--amber);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 20px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo-mark">🌸</div>
+    <div>
+      <div class="brand">WILDFL<span>🌸</span>WER</div>
+      <div class="sub-brand">Prep Recipes &amp; Procedures</div>
+    </div>
+  </div>
+  <div class="search-bar">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search recipes or ingredients…" oninput="handleSearch(this.value)">
+    <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
+  </div>
+</div>
+
+<div class="filter-row" id="filterRow">
+  <div class="filter-chip active" onclick="setFilter('all', this)">All</div>
+  <div class="filter-chip" onclick="setFilter('sauce', this)">Sauces</div>
+  <div class="filter-chip" onclick="setFilter('spread', this)">Spreads</div>
+  <div class="filter-chip" onclick="setFilter('produce', this)">Produce</div>
+  <div class="filter-chip" onclick="setFilter('protein', this)">Proteins</div>
+  <div class="filter-chip" onclick="setFilter('cheese', this)">Cheeses</div>
+  <div class="filter-chip" onclick="setFilter('salad', this)">Salads</div>
+  <div class="filter-chip" onclick="setFilter('other', this)">Other</div>
+  <div class="filter-chip" onclick="setFilter('pasta', this)">Pasta</div>
+  <div class="filter-chip" onclick="setFilter('baked', this)">Baked</div>
+  <div class="filter-chip" onclick="setFilter('batter', this)">Batters</div>
+  <div class="filter-chip" onclick="setFilter('dressing', this)">Dressings</div>
+  <div class="filter-chip" onclick="setFilter('seafood', this)">Seafood</div>
+</div>
+
+<div class="count-bar" id="countBar">52 recipes</div>
+<div class="recipe-list" id="recipeList"></div>
+
+<script>
+const TODAY = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];
+
+const RECIPES = [
+  {
+    id: 1,
+    name: "Avocado – Chunky Spread",
+    revised: "10/21/23",
+    prepTime: "5 min (Recipe 1)",
+    category: "spread",
+    batches: ["Recipe 1", "Recipe 2", "Recipe 3"],
+    ingredients: [
+      { part: "A", name: "Avocado", amounts: ["1 Package", "2 Packages", "4 Packages"] },
+      { part: "B", name: "Lemon Juice", amounts: ["1½ Tbsp.", "3 Tbsp.", "3 fl. oz."] },
+      { part: "B", name: "Salt", amounts: ["1 tsp.", "2 tsp.", "1 Tbsp. + 1 tsp."] },
+    ],
+    yields: [
+      { label: "2 Pounds", orders: "18 orders @ 1.7 oz." },
+      { label: "4.1 Pounds", orders: "38 orders @ 1.7 oz." },
+      { label: "8.2 Pounds", orders: "77 orders @ 1.7 oz." },
+    ],
+    tools: ["Stainless Steel Bowl", "Measuring Spoons", "Measuring Cup", "Whisk", "Deli Container w/Lid", "Plastic Wrap", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from dry storage and walk-in to make par.",
+      "<b>PART A:</b> Portion ingredients into bowl.",
+      "<b>PART B:</b> Portion ingredients into bowl.",
+      "If preparing lemon juice, follow the Lemon Juice Prep Recipe &amp; Procedure.",
+      "<span class='warning'>GENTLY</span> mix with large whisk until all ingredients are combined.",
+      "<b>DO NOT OVER MIX.</b> <span class='warning'>Whole pieces of avocado should still be visible, see picture.</span>",
+      "Spatula contents into proper container, place plastic wrap on top of avocado chunky spread and close with lid.",
+      "Label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Thursday"},{make:"Wednesday",use:"Friday"},{make:"Thursday",use:"Saturday"},
+      {make:"Friday",use:"Sunday"},{make:"Saturday",use:"Monday"},{make:"Sunday",use:"Tuesday"},{make:"Monday",use:"Wednesday"}
+    ],
+  },
+  {
+    id: 2,
+    name: "Chipotle Sauce",
+    revised: "02/24/24",
+    prepTime: "4 min (Recipe 1)",
+    category: "sauce",
+    batches: ["Recipe 1", "Recipe 2", "Recipe 3"],
+    ingredients: [
+      { part: "A", name: "Chipotles in Adobo Sauce", amounts: ["1 Can", "2 Cans", "3 Cans"] },
+      { part: "B", name: "Mayonnaise", amounts: ["1 Quart", "2 Quarts", "3 Quarts"] },
+    ],
+    yields: [
+      { label: "1.2 Quarts", orders: "38 orders @ 1 oz." },
+      { label: "2.4 Quarts", orders: "76 orders @ 1 oz." },
+      { label: "3.6 Quarts", orders: "117 orders @ 1 oz." },
+    ],
+    tools: ["Cut Glove", "Cutting Board", "Chef Knife", "Whisk", "Stainless Steel Bowl", "13.5\" Rubber Spatula", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from dry storage to make par.",
+      "<b>PART A:</b> Remove chipotles from can and using a chef knife, mince into 1/8\" or smaller pieces. <span class='warning'>Do not use food processor.</span>",
+      "Transfer into appropriate size stainless steel bowl.",
+      "Using a spatula, scrape all adobo sauce from can into bowl.",
+      "<b>PART B:</b> Portion mayonnaise into bowl.",
+      "Whisk continuously until all ingredients are <b>WELL</b> combined.",
+      "Once thoroughly combined, spatula contents into proper container.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Monday"},{make:"Wednesday",use:"Tuesday"},{make:"Thursday",use:"Wednesday"},
+      {make:"Friday",use:"Thursday"},{make:"Saturday",use:"Friday"},{make:"Sunday",use:"Saturday"},{make:"Monday",use:"Sunday"}
+    ],
+  },
+  {
+    id: 3,
+    name: "Blue Cheese – Crumbled",
+    revised: "08/27/22",
+    prepTime: "10 min (small batch)",
+    category: "cheese",
+    batches: ["Small Batch"],
+    ingredients: [
+      { part: "A", name: "Blue Cheese (1 wheel)", amounts: ["7 lbs."] },
+    ],
+    yields: [
+      { label: "6.9 Pounds", orders: "73 orders @ 1.5 oz." },
+    ],
+    tools: ["Cut Glove", "Chef Knife", "Cutting Board", "Stainless Steel Bowl", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in to make par.",
+      "<b>PART A:</b> Blue cheese should sit at room temperature for 15–20 minutes before crumbling.",
+      "Using a chef knife, cut blue cheese wheel into 2–3\" pieces to make it easier for crumbling.",
+      "Transfer pieces into a stainless-steel bowl.",
+      "Using gloved hands, crumble blue cheese into 1/8\" to 5/8\" pieces.",
+      "Once all blue cheese is crumbled to 5/8\" pieces or smaller, transfer into proper container.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Monday"},{make:"Wednesday",use:"Tuesday"},{make:"Thursday",use:"Wednesday"},
+      {make:"Friday",use:"Thursday"},{make:"Saturday",use:"Friday"},{make:"Sunday",use:"Saturday"},{make:"Monday",use:"Sunday"}
+    ],
+  },
+  {
+    id: 4,
+    name: "Chipotle Sauce (duplicate sheet)",
+    revised: "02/24/24",
+    prepTime: "4 min (Recipe 1)",
+    category: "sauce",
+    hidden: true,
+    batches: ["Recipe 1", "Recipe 2", "Recipe 3"],
+    ingredients: [],
+    yields: [],
+    tools: [],
+    steps: [],
+    shelfLife: [],
+  },
+  {
+    id: 5,
+    name: "Berries & Yogurt Parfait",
+    revised: "12/10/22",
+    prepTime: "10 min (6 portions)",
+    category: "other",
+    batches: ["Per Portion"],
+    ingredients: [
+      { part: "A", name: "Honey Yogurt", amounts: ["1 scoop (Disher Ivory / 3.5 oz.)"] },
+      { part: "A", name: "Berry Compote", amounts: ["1 scoop (Disher Yellow / 2 oz.)"] },
+      { part: "A", name: "Honey Yogurt (top layer)", amounts: ["1 scoop (Disher Ivory / 3.5 oz.)"] },
+      { part: "B", name: "Granola", amounts: ["1 scoop (Disher Blue / 1.1 oz.)"] },
+    ],
+    yields: [
+      { label: "1 Portion", orders: "1 portion @ 10.1 oz." },
+    ],
+    tools: ["12 fl. oz. Cold Cups", "12 fl. oz. Cold Cup Lids", "Parfait Cup Inserts", "Label Gun", "Brown Serving Tray", "Disher Ivory", "Disher Yellow", "Disher Blue"],
+    steps: [
+      "Retrieve enough ingredients from the walk-in &amp; dry storage to make par.",
+      "Layout cold cups needed face down to make par.",
+      "Using label gun, mark each container with use by date on the bottom of each cup. See shelf life table for the correct day.",
+      "Turn labeled cups upright.",
+      "<b>PART A:</b> Portion in order listed, using full level scoops for accurate portioning. Avoid the sides of the cup for nice clean layers.",
+      "Place parfait cup insert into each cup. If properly portioned, yogurt will not touch the parfait insert.",
+      "<b>PART B:</b> Portion granola into each insert.",
+      "Seal with cold cup lid.",
+      "Place finished parfaits on brown serving tray and store in refrigerator.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Thursday"},{make:"Wednesday",use:"Friday"},{make:"Thursday",use:"Saturday"},
+      {make:"Friday",use:"Sunday"},{make:"Saturday",use:"Monday"},{make:"Sunday",use:"Tuesday"},{make:"Monday",use:"Wednesday"}
+    ],
+  },
+  {
+    id: 6,
+    name: "Corned Beef Brisket – 1/32\" Sliced",
+    revised: "06/06/20",
+    prepTime: "12 min (24 portions)",
+    category: "protein",
+    batches: ["Per Piece"],
+    ingredients: [
+      { part: "A", name: "Corned Beef Brisket", amounts: ["4 oz. portion / 1/32\" slice / 16–24 slices per portion"] },
+    ],
+    yields: [
+      { label: "~5.9 Pounds avg.", orders: "23 orders @ 4 oz." },
+    ],
+    tools: ["Cut Glove", "Slicer", "Digital Scale", "Day Bag with Stand", "Lined Sheet Pan"],
+    steps: [
+      "Retrieve enough ingredients from walk-in to make par.",
+      "<b>PART A:</b> Remove from packaging and drain any liquid.",
+      "Place on slicer with the cut side (widest part) facing the slicer blade.",
+      "Slice according to slicer standards indicated in table. <span class='warning'>Slicer number is determined &amp; recorded by the General Manager.</span>",
+      "Place day bag on scale and set to read \"0\" zero. See shelf life table for the correct day bag.",
+      "Portion according to the portion weight indicated in the table.",
+      "<b>NOTE:</b> For portioning, use your dominant hand to grab and portion ingredient(s) and use your non-dominant un-gloved hand to handle day bags.",
+      "Sliced meat is placed loosely in day bags, not stacked or folded.",
+      "Repeat steps 2–3 for all portions. Place portions on clean prep table.",
+      "To close portion bags, lightly roll portion and turn over flap to close. <span class='warning'>Do not twist day bags to close.</span>",
+      "Place day bags on a lined sheet pan and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Thursday"},{make:"Wednesday",use:"Friday"},{make:"Thursday",use:"Saturday"},
+      {make:"Friday",use:"Sunday"},{make:"Saturday",use:"Monday"},{make:"Sunday",use:"Tuesday"},{make:"Monday",use:"Wednesday"}
+    ],
+  },
+  {
+    id: 7,
+    name: "Cucumbers – 1/8\" Sliced & Half Moons",
+    revised: "02/20/21",
+    prepTime: "8 min (Recipe 1)",
+    category: "produce",
+    batches: ["Recipe 1 (1 lb)", "Recipe 2 (2 lbs)", "Recipe 3 (3 lbs)"],
+    ingredients: [
+      { part: "A", name: "Cucumbers", amounts: ["1 lb. / 25 orders @ 6 slices, 14 orders @ 1.1 oz.", "2 lbs. / 51 orders @ 6 slices, 29 orders @ 1.1 oz.", "3 lbs. / 77 orders @ 6 slices, 43 orders @ 1.1 oz."] },
+    ],
+    yields: [
+      { label: "1 Pound", orders: "25 orders sliced / 14 orders half-moons" },
+      { label: "2 Pounds", orders: "51 orders sliced / 29 orders half-moons" },
+      { label: "3 Pounds", orders: "77 orders sliced / 43 orders half-moons" },
+    ],
+    tools: ["Cutting Board", "Cut Glove", "Chef's Knife", "Slicer", "Hotel Pan", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in to make par.",
+      "<b>PART A (Sliced):</b> Wash cucumbers according to the Produce Washing Prep Recipe &amp; Procedure.",
+      "Using a chef's knife, remove 1/2\" from each end of cucumber and discard.",
+      "Using a chef's knife, cut cucumber in half.",
+      "Place cucumber on the slicer with the cut side facing down.",
+      "Slice according to slicer standards indicated in table. <span class='warning'>Slicer number determined &amp; recorded by GM.</span>",
+      "Transfer into appropriate container. Cover, label, date as indicated in shelf life table and refrigerate.",
+      "<b>TO CUT HALF-MOONS:</b> Retrieve sliced cucumbers from walk-in.",
+      "Stack sliced cucumbers in small piles 8–10 pieces high.",
+      "Cut cucumber slices in half to create half-moons.",
+      "Transfer into appropriate container. Cover, label, date and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Thursday"},{make:"Wednesday",use:"Friday"},{make:"Thursday",use:"Saturday"},
+      {make:"Friday",use:"Sunday"},{make:"Saturday",use:"Monday"},{make:"Sunday",use:"Tuesday"},{make:"Monday",use:"Wednesday"}
+    ],
+  },
+  {
+    id: 8,
+    name: "Caramelized Onion Sauerkraut",
+    revised: "06/06/20",
+    prepTime: "16 min (small batch)",
+    category: "other",
+    batches: ["Small Batch", "Medium Batch", "Large Batch"],
+    ingredients: [
+      { part: "A", name: "Sauerkraut", amounts: ["4 lbs. + 8 oz.", "9 lbs.", "18 lbs. (4 bags)"] },
+      { part: "B", name: "Caramelized Onions", amounts: ["2 lbs. (1 bag)", "4 lbs. (2 bags)", "8 lbs. (4 bags)"] },
+    ],
+    yields: [
+      { label: "6.5 Pounds", orders: "29 orders @ 3.5 oz." },
+      { label: "13 Pounds", orders: "59 orders @ 3.5 oz." },
+      { label: "26 Pounds", orders: "118 orders @ 3.5 oz." },
+    ],
+    tools: ["Colander", "Digital Scale", "Stainless Steel Bowl", "13.5\" Spatula", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in to make par.",
+      "<b>PART A:</b> Place colander into produce sink and empty entire bucket of sauerkraut into a colander.",
+      "Allow to drain for 10 minutes. <span class='warning'>Correct time is essential.</span>",
+      "Using a spatula or gloved hands apply pressure to completely drain all liquid from sauerkraut.",
+      "Portion quantity needed into appropriately sized stainless-steel bowl.",
+      "<b>PART B:</b> Portion caramelized onions into bowl.",
+      "Using gloved hands to toss and mix until all ingredients are <b>WELL</b> combined.",
+      "Once thoroughly combined, spatula contents into proper container.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Monday"},{make:"Wednesday",use:"Tuesday"},{make:"Thursday",use:"Wednesday"},
+      {make:"Friday",use:"Thursday"},{make:"Saturday",use:"Friday"},{make:"Sunday",use:"Saturday"},{make:"Monday",use:"Sunday"}
+    ],
+  },
+  {
+    id: 9,
+    name: "Chicken Breast Portions – Sliced",
+    revised: "06/06/20",
+    prepTime: "12 min (15 portions)",
+    category: "protein",
+    batches: ["1 Bag (~3 lbs)", "2 Bags (~6 lbs)"],
+    ingredients: [
+      { part: "A", name: "Chicken Breast for Slicing", amounts: ["1 Bag (~3 lbs.) / 15 portions @ 3.0 oz.", "2 Bags (~6 lbs.) / 30 portions @ 3.0 oz."] },
+    ],
+    yields: [
+      { label: "15 Portions", orders: "15 orders @ 3.0 oz." },
+      { label: "30 Portions", orders: "30 orders @ 3.0 oz." },
+    ],
+    tools: ["Cut Glove", "Nemco Easy Slicer", "Lined Sheet Pan(s)", "Digital Scale", "Day Bags with Stand"],
+    steps: [
+      "Retrieve enough ingredients from walk-in to make par. <span class='warning'>Only use the chicken breast FOR SLICING.</span>",
+      "<b>PART A:</b> Remove chicken breast from bag and place on a parchment lined sheet pan. This will help remove any excess liquid in the bag.",
+      "Place a clean lined sheet pan up against easy slicer. Ensure all parts are in place and secure.",
+      "Open cover plate and place 2–3 pieces of chicken breast into the trough of the easy slicer vertically with the larger end of the chicken breast facing the blade.",
+      "Place an even amount of pressure on the pusher handle while turning the handle clockwise to slice the chicken breast.",
+      "Repeat steps D–E for quantity needed to make par.",
+      "Once all chicken breast has been sliced, use gloved hands to break up larger pieces.",
+      "Place day bag on scale and set to read \"0\" zero. See shelf life table for the correct day bag.",
+      "Portion according to the portion weight indicated in the table.",
+      "Place portions on clean prep table. Twist day bags to close.",
+      "Place day bags on a lined sheet pan and refrigerate.",
+      "<span class='warning'>Clean and sanitize easy slicer in 3-compartment sink. Never clean easy chopper in dishwasher.</span>",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Thursday"},{make:"Wednesday",use:"Friday"},{make:"Thursday",use:"Saturday"},
+      {make:"Friday",use:"Sunday"},{make:"Saturday",use:"Monday"},{make:"Sunday",use:"Tuesday"},{make:"Monday",use:"Wednesday"}
+    ],
+  },
+  {
+    id: 10,
+    name: "Crunch Mix",
+    revised: "05/22/21",
+    prepTime: "5 min (Recipe 1)",
+    category: "produce",
+    batches: ["Recipe 1", "Recipe 2", "Recipe 3"],
+    ingredients: [
+      { part: "A", name: "Tri-Color Carrots (1/8\" shred)", amounts: ["1 lb.", "2 lbs.", "3 lbs."] },
+      { part: "B", name: "Jicama & Celery (1/4\" diced)", amounts: ["2 lbs. (1 kit)", "4 lbs. (2 kits)", "6 lbs. (3 kits)"] },
+    ],
+    yields: [
+      { label: "3 Pounds", orders: "68 @ 0.7 oz. (slaw) / 17 @ 2.8 oz. (asian salad)" },
+      { label: "6 Pounds", orders: "137 @ 0.7 oz. (slaw) / 34 @ 2.8 oz. (asian salad)" },
+      { label: "9 Pounds", orders: "205 @ 0.7 oz. (slaw) / 51 @ 2.8 oz. (asian salad)" },
+    ],
+    tools: ["Stainless Steel Bowl", "Digital Scale", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in to make par.",
+      "<b>PART A:</b> Using a digital scale, portion tri-color carrots into a large enough stainless-steel bowl.",
+      "<b>PART B:</b> Open and empty the entire contents of jicama and celery into the stainless-steel bowl and mix with gloved hands until all ingredients are <b>WELL</b> combined.",
+      "Once thoroughly combined, transfer into appropriate container.",
+      "Cover, label, date as indicated in table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Thursday"},{make:"Wednesday",use:"Friday"},{make:"Thursday",use:"Saturday"},
+      {make:"Friday",use:"Sunday"},{make:"Saturday",use:"Monday"},{make:"Sunday",use:"Tuesday"},{make:"Monday",use:"Wednesday"}
+    ],
+  },
+  {
+    id: 11,
+    name: "Elote Sauce",
+    revised: "05/27/23",
+    prepTime: "5 min (Recipe 1)",
+    category: "sauce",
+    batches: ["Recipe 1", "Recipe 2", "Recipe 3"],
+    ingredients: [
+      { part: "A", name: "Mayonnaise", amounts: ["1 Quart", "2 Quarts", "3 Quarts"] },
+      { part: "A", name: "Cholula", amounts: ["2 fl. oz.", "4 fl. oz.", "6 fl. oz."] },
+      { part: "A", name: "Lime Juice", amounts: ["2 fl. oz.", "4 fl. oz.", "6 fl. oz."] },
+      { part: "A", name: "Cayenne Pepper", amounts: ["1½ tsp.", "1 Tbsp.", "1½ Tbsp."] },
+    ],
+    yields: [
+      { label: "1.1 Quarts", orders: "35 orders @ 1 fl. oz." },
+      { label: "2.25 Quarts", orders: "70 orders @ 1 fl. oz." },
+      { label: "3.3 Quarts", orders: "105 orders @ 1 fl. oz." },
+    ],
+    tools: ["Measuring Cup", "Stainless Steel Bowl", "Whisk", "3.5\" Spatula", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in and dry storage to make par.",
+      "<b>PART A:</b> Portion ingredients into large enough stainless-steel bowl.",
+      "Whisk until all ingredients are <b>WELL</b> combined.",
+      "Once combined, spatula contents into appropriately sized container.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Monday"},{make:"Wednesday",use:"Tuesday"},{make:"Thursday",use:"Wednesday"},
+      {make:"Friday",use:"Thursday"},{make:"Saturday",use:"Friday"},{make:"Sunday",use:"Saturday"},{make:"Monday",use:"Sunday"}
+    ],
+  },
+  {
+    id: 12,
+    name: "Feta Cheese – Crumbled",
+    revised: "06/06/20",
+    prepTime: "4 min (small batch)",
+    category: "cheese",
+    batches: ["½ Container (4 lbs)", "1 Container (8 lbs)", "2 Containers (16 lbs)"],
+    ingredients: [
+      { part: "A", name: "Feta", amounts: ["4 lbs. (½ container)", "8 lbs. (1 container)", "16 lbs. (2 containers)"] },
+    ],
+    yields: [
+      { label: "4 Pounds", orders: "53 orders @ 1.2 oz." },
+      { label: "8 Pounds", orders: "106 orders @ 1.2 oz." },
+      { label: "16 Pounds", orders: "213 orders @ 1.2 oz." },
+    ],
+    tools: ["Stainless Steel Bowl", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in to make par. <span class='warning'>NOTE: Feta is extremely temperature sensitive and must be immediately prepped once removed from the walk-in.</span>",
+      "<b>PART A:</b> At a designated place (produce sink, 3-compartment sink, or bowl), remove lid and place lid over opening slightly askew. While holding the lid in place, turn container over into sink to drain all liquid from container.",
+      "Remove one block from container at a time and break into smaller pieces.",
+      "Using gloved hands, crumble feta into 1/8\" to 5/8\" pieces.",
+      "Once all feta is crumbled to 5/8\" pieces or smaller, transfer into proper container.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Monday"},{make:"Wednesday",use:"Tuesday"},{make:"Thursday",use:"Wednesday"},
+      {make:"Friday",use:"Thursday"},{make:"Saturday",use:"Friday"},{make:"Sunday",use:"Saturday"},{make:"Monday",use:"Sunday"}
+    ],
+  },
+  {
+    id: 13,
+    name: "Bagel Spread – Garlic & Scallion Cream Cheese",
+    revised: "12/21/24",
+    prepTime: "4 min (Recipe 1)",
+    category: "spread",
+    batches: ["Recipe 1", "Recipe 2", "Recipe 3"],
+    ingredients: [
+      { part: "A", name: "Cream Cheese (whipped)", amounts: ["2 lbs.", "3 lbs.", "4 lbs."] },
+      { part: "A", name: "Green Onions (1/8\" sliced)", amounts: ["6 oz.", "9 oz.", "12 oz."] },
+      { part: "A", name: "Granulated Garlic", amounts: ["4 pinches", "6 pinches", "12 pinches"] },
+    ],
+    yields: [
+      { label: "2.4 lbs.", orders: "19 orders @ 2 oz." },
+      { label: "3.6 lbs.", orders: "29 orders @ 2 oz." },
+      { label: "4.8 lbs.", orders: "38 orders @ 2 oz." },
+    ],
+    tools: ["Digital Scale", "Stainless Steel Mixing Bowl", "Measuring Spoons", "13.5\" Spatula"],
+    steps: [
+      "<b>PART A:</b> Retrieve enough ingredients from walk-in and dry storage to make par.",
+      "Combine ingredients in a stainless steel bowl.",
+      "Using a rubber spatula, mix ingredients until <b>WELL</b> combined.",
+      "Transfer to appropriate container.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Sunday"},{make:"Wednesday",use:"Monday"},{make:"Thursday",use:"Tuesday"},
+      {make:"Friday",use:"Wednesday"},{make:"Saturday",use:"Thursday"},{make:"Sunday",use:"Friday"},{make:"Monday",use:"Saturday"}
+    ],
+  },
+  {
+    id: 14,
+    name: "Bagel Spread – Zesty Red Pepper Cream Cheese",
+    revised: "11/02/24",
+    prepTime: "4 min (Recipe 1)",
+    category: "spread",
+    batches: ["Recipe 1", "Recipe 2", "Recipe 3"],
+    ingredients: [
+      { part: "A", name: "Cream Cheese (whipped)", amounts: ["2 lbs.", "3 lbs.", "4 lbs."] },
+      { part: "A", name: "Hot Peppers (minced 1/8\")", amounts: ["8 oz.", "12 oz.", "1 lb."] },
+    ],
+    yields: [
+      { label: "2.5 lbs.", orders: "20 orders @ 2 oz." },
+      { label: "3.75 lbs.", orders: "30 orders @ 2 oz." },
+      { label: "5 lbs.", orders: "40 orders @ 2 oz." },
+    ],
+    tools: ["Digital Scale", "Stainless Steel Mixing Bowl", "Measuring Spoons", "13.5\" Spatula"],
+    steps: [
+      "<b>PART A:</b> Retrieve enough ingredients from walk-in and dry storage to make par.",
+      "Combine ingredients in a stainless steel bowl.",
+      "Using a rubber spatula, mix ingredients until <b>WELL</b> combined.",
+      "Transfer to appropriate container.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Sunday"},{make:"Wednesday",use:"Monday"},{make:"Thursday",use:"Tuesday"},
+      {make:"Friday",use:"Wednesday"},{make:"Saturday",use:"Thursday"},{make:"Sunday",use:"Friday"},{make:"Monday",use:"Saturday"}
+    ],
+  },
+  {
+    id: 15,
+    name: "Brie Cheese – 1/4\" Sliced",
+    revised: "09/04/21",
+    prepTime: "8 min (1 piece)",
+    category: "cheese",
+    batches: ["Per Piece"],
+    ingredients: [
+      { part: "A", name: "Brie", amounts: ["1.5 oz. portion / 1/4\" thick / 3 slices per portion"] },
+    ],
+    yields: [
+      { label: "~1.9 Pounds avg.", orders: "21 orders @ 1.5 oz." },
+    ],
+    tools: ["Cut Glove", "Cutting Board", "Digital Scale", "Deli Paper", "Plastic Wrap", "Shelf Life Labels"],
+    steps: [
+      "Retrieve ingredients from walk-in. <span class='warning'>Brie is extremely temperature sensitive. Only remove from walk-in when ready to prep. Only remove 1 piece from walk-in at a time.</span>",
+      "<b>PART A:</b> Remove from packaging.",
+      "Using a chef's knife cut the brie into thirds as pictured.",
+      "Trim rind from piece #2 by removing 1/8\" from each end as pictured.",
+      "Remove 1\" from the top and bottom of pieces #1 and #3 as pictured.",
+      "Cut brie into 1/4\" slices. Each piece should be approximately 0.5 oz. <span class='warning'>NOTE: Waste should be 3.5 oz. or less per brie.</span>",
+      "Place deli paper on scale and set to read \"0\" zero.",
+      "Portion 3 pieces (1.5 oz.) of brie onto deli paper. Fold deli paper over to cover.",
+      "Repeat steps D–F for all portions needed. Wrap 8 portions together with plastic wrap.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Monday"},{make:"Wednesday",use:"Tuesday"},{make:"Thursday",use:"Wednesday"},
+      {make:"Friday",use:"Thursday"},{make:"Saturday",use:"Friday"},{make:"Sunday",use:"Saturday"},{make:"Monday",use:"Sunday"}
+    ],
+  },
+  {
+    id: 16,
+    name: "Chicken Salad",
+    revised: "10/26/24",
+    prepTime: "20 min (Recipe 1)",
+    category: "salad",
+    batches: ["Recipe 1", "Recipe 2", "Recipe 3"],
+    ingredients: [
+      { part: "A", name: "Chicken Breast (sliced)", amounts: ["5 lbs.", "10 lbs.", "20 lbs."] },
+      { part: "B", name: "Red Bell Peppers (1/4\" diced)", amounts: ["6 oz.", "12 oz.", "1 lb. + 8 oz."] },
+      { part: "C", name: "Green Onions (1/8\" diced)", amounts: ["2.6 oz.", "5.2 oz.", "10.4 oz."] },
+      { part: "D", name: "Garlic (minced)", amounts: ["1.4 oz.", "2.8 oz.", "5.6 oz."] },
+      { part: "E", name: "Celery (1/4\" diced)", amounts: ["4 oz.", "8 oz.", "1 lb."] },
+      { part: "E", name: "Jicama (1/4\" diced)", amounts: ["4 oz.", "8 oz.", "1 lb."] },
+      { part: "E", name: "Salt", amounts: ["1 tsp.", "2 tsp.", "1 Tbsp. + 1 tsp."] },
+      { part: "E", name: "Black Pepper", amounts: ["1 tsp.", "2 tsp.", "1 Tbsp. + 1 tsp."] },
+      { part: "E", name: "Mayonnaise", amounts: ["1 lb. + 8 oz.", "3 lbs.", "6 lbs."] },
+    ],
+    yields: [
+      { label: "7.7 Pounds", orders: "20 orders @ 6 oz." },
+      { label: "15.4 Pounds", orders: "41 orders @ 6 oz." },
+      { label: "30.8 Pounds", orders: "82 orders @ 6 oz." },
+    ],
+    tools: ["Cut Glove", "Nemco Easy Slicer", "Lined Sheet Pan(s)", "Chef Knife", "Stainless Steel Bowl", "Easy Chopper", "1/4\" Dicer Blade", "Hotel Pan", "Digital Scale", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from dry storage and walk-in to make par.",
+      "<b>PART A:</b> Slice chicken breast according to the Chicken Breast – Sliced Prep Recipe &amp; Procedure. Portion into large enough stainless-steel bowl.",
+      "<b>PART B:</b> Trim and dice red bell peppers. Use the 1/4\" dicer blade for smaller size. Add to bowl.",
+      "<b>PART C:</b> If preparing green onions, follow the Green Onions – Sliced Prep Recipe &amp; Procedure and add to bowl.",
+      "<b>PART D:</b> Mince garlic. Ensure that ends are trimmed from garlic if necessary and add to bowl.",
+      "<b>PART E:</b> Portion ingredients into bowl.",
+      "Mix with gloved hands continuously until all ingredients are <b>WELL</b> combined.",
+      "Once thoroughly combined, spatula contents into proper container.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Friday"},{make:"Wednesday",use:"Saturday"},{make:"Thursday",use:"Sunday"},
+      {make:"Friday",use:"Monday"},{make:"Saturday",use:"Tuesday"},{make:"Sunday",use:"Wednesday"},{make:"Monday",use:"Thursday"}
+    ],
+  },
+  {
+    id: 17,
+    name: "Buffalo Sauce",
+    revised: "11/07/20",
+    prepTime: "6 min (small batch)",
+    category: "sauce",
+    batches: ["Small Batch", "Medium Batch", "Large Batch"],
+    ingredients: [
+      { part: "A", name: "Ranch", amounts: ["1 Bag (0.5 gal.)", "2 Bags (1 gal.)", "4 Bags (2 gals.)"] },
+      { part: "A", name: "Mayonnaise", amounts: ["1 Quart", "2 Quarts", "1 Gallon"] },
+      { part: "A", name: "Frank's Buffalo Wing Sauce", amounts: ["2 Cups + 4 fl. oz.", "1 Quart + 8 fl. oz.", "2 Quarts + 16 fl. oz."] },
+      { part: "A", name: "Cayenne Pepper", amounts: ["2 tsp.", "1 Tbsp. + 1 tsp.", "2 Tbsp. + 2 tsp."] },
+    ],
+    yields: [
+      { label: "3.6 Quarts", orders: "38 orders @ 3 fl. oz." },
+      { label: "1.8 Gallons", orders: "76 orders @ 3 fl. oz." },
+      { label: "3.6 Gallons", orders: "152 orders @ 3 fl. oz." },
+    ],
+    tools: ["Stainless Steel Bowl", "Measuring Cup", "Measuring Spoons", "Whisk", "13.5\" Spatula", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in and dry storage to make par.",
+      "<b>PART A:</b> Portion into a large enough stainless-steel bowl and whisk continuously until all ingredients are <b>WELL</b> combined.",
+      "Once thoroughly combined, spatula contents into proper container.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Monday"},{make:"Wednesday",use:"Tuesday"},{make:"Thursday",use:"Wednesday"},
+      {make:"Friday",use:"Thursday"},{make:"Saturday",use:"Friday"},{make:"Sunday",use:"Saturday"},{make:"Monday",use:"Sunday"}
+    ],
+  },
+  {
+    id: 18,
+    name: "Green Onions – 1/8\" Sliced",
+    revised: "06/06/20",
+    prepTime: "4 min (small batch)",
+    category: "produce",
+    batches: ["1 Pound", "2 Pounds", "3 Pounds"],
+    ingredients: [
+      { part: "A", name: "Green Onions", amounts: ["1 lb.", "2 lbs.", "3 lbs."] },
+    ],
+    yields: [
+      { label: "13.8 oz.", orders: "34 orders @ 0.4 oz." },
+      { label: "1.7 Pounds", orders: "68 orders @ 0.4 oz." },
+      { label: "2.6 Pounds", orders: "103 orders @ 0.4 oz." },
+    ],
+    tools: ["Cut Glove", "Cutting Board", "Chef's Knife", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in to make par.",
+      "<b>PART A:</b> Remove any soft or damaged outer layers of green onions from stalk.",
+      "Using a chef's knife remove approximately 1\" from the tops of the green onions.",
+      "Position chef's knife at a 45° angle along the bias of the green onions and cut to 1/8\" thick slices.",
+      "<span class='warning'>Do not slice into pale green/white part of the green onion.</span>",
+      "Transfer into appropriate container.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Thursday"},{make:"Wednesday",use:"Friday"},{make:"Thursday",use:"Saturday"},
+      {make:"Friday",use:"Sunday"},{make:"Saturday",use:"Monday"},{make:"Sunday",use:"Tuesday"},{make:"Monday",use:"Wednesday"}
+    ],
+  },
+  {
+    id: 19,
+    name: "Herb Mayonnaise",
+    revised: "06/06/20",
+    prepTime: "6 min (small batch)",
+    category: "sauce",
+    batches: ["Small Batch (1 gal)", "Large Batch (2 gal)"],
+    ingredients: [
+      { part: "A", name: "Parsley (finely chopped)", amounts: ["0.5 oz.", "1.0 oz."] },
+      { part: "A", name: "Basil (finely chopped)", amounts: ["0.4 oz.", "0.8 oz."] },
+      { part: "A", name: "Cilantro (finely chopped)", amounts: ["0.3 oz.", "0.6 oz."] },
+      { part: "B", name: "Mayonnaise", amounts: ["1 Gallon", "2 Gallons"] },
+    ],
+    yields: [
+      { label: "1 Gallon", orders: "171 orders @ 0.7 oz." },
+      { label: "2 Gallons", orders: "342 orders @ 0.7 oz." },
+    ],
+    tools: ["Cut Glove", "Cutting Board", "Chef Knife", "Digital Scale", "Stainless Steel Bowl", "Whisk", "13.5\" Spatula", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in and dry storage to make par.",
+      "<b>PART A:</b> Using a chef knife, chop herbs into 1/8\" pieces or smaller.",
+      "<b>PART B:</b> Using a spatula, empty entire contents of container into a large enough stainless-steel bowl.",
+      "Portion herbs into bowl and whisk continuously until all ingredients are <b>WELL</b> combined.",
+      "Once thoroughly combined, spatula contents into proper container.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Monday"},{make:"Wednesday",use:"Tuesday"},{make:"Thursday",use:"Wednesday"},
+      {make:"Friday",use:"Thursday"},{make:"Saturday",use:"Friday"},{make:"Sunday",use:"Saturday"},{make:"Monday",use:"Sunday"}
+    ],
+  },
+  {
+    id: 20,
+    name: "Home Fries",
+    revised: "08/27/22",
+    prepTime: "12 min (small batch)",
+    category: "baked",
+    batches: ["Small Batch", "Large Batch"],
+    ingredients: [
+      { part: "A", name: "Rosemary (finely chopped)", amounts: ["2 tsp.", "4 tsp."] },
+      { part: "B", name: "Olive Oil", amounts: ["4 fl. oz.", "8 fl. oz."] },
+      { part: "B", name: "Salt", amounts: ["2 tsp.", "4 tsp."] },
+      { part: "B", name: "Black Pepper", amounts: ["1 tsp.", "2 tsp."] },
+      { part: "B", name: "Granulated Garlic", amounts: ["½ tsp.", "1 tsp."] },
+      { part: "B", name: "Paprika", amounts: ["1 tsp.", "2 tsp."] },
+      { part: "C", name: "Roasted Potatoes", amounts: ["5 lbs. (2 bags)", "10 lbs. (4 bags)"] },
+    ],
+    yields: [
+      { label: "4.25 Pounds", orders: "14 orders @ 5 oz." },
+      { label: "8.5 Pounds", orders: "28 orders @ 5 oz." },
+    ],
+    tools: ["Cut Glove", "Cutting Board", "Chef Knife", "Stainless Steel Bowl", "Measuring Spoons", "2 fl. oz. Ladle", "Whisk", "Lined Sheet Pan(s)", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from dry storage, walk-in and freezer to make par.",
+      "<b>PART A:</b> Remove rosemary leaves from woody stems onto cutting board. Run fingers down the stem to remove the leaves. Discard stems. Using a chef knife, finely chop rosemary.",
+      "<b>PART B:</b> Portion into appropriate size stainless steel bowl and add rosemary. Whisk continuously until all ingredients are <b>WELL</b> combined.",
+      "<b>PART C:</b> Add roasted potatoes to bowl and toss until all ingredients are <b>WELL</b> combined.",
+      "Place home fries on parchment lined sheet pan in a single layer. <span class='warning'>Maximum 5 lbs. per sheet pan.</span>",
+      "Cover with parchment, label, date as indicated in shelf life table and freeze.",
+      "<b>Cooking &amp; Holding:</b> Preheat convection oven to 350°F.",
+      "Bake at 350°F for 15 minutes; rotate and bake for an additional 8–10 minutes.",
+      "Transfer to appropriate size hotel pan with lid. <span class='warning'>Do not use hot pan liner.</span>",
+      "Place in soup warmer and set to maintain 165°F. Lid must remain on when not in use.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Monday"},{make:"Wednesday",use:"Tuesday"},{make:"Thursday",use:"Wednesday"},
+      {make:"Friday",use:"Thursday"},{make:"Saturday",use:"Friday"},{make:"Sunday",use:"Saturday"},{make:"Monday",use:"Sunday"}
+    ],
+  },
+  {
+    id: 21,
+    name: "Honey Yogurt",
+    revised: "12/10/22",
+    prepTime: "5 min (small batch)",
+    category: "other",
+    batches: ["Small (1 container)", "Medium (4 containers)", "Large (6 containers)"],
+    ingredients: [
+      { part: "A", name: "Plain Greek Yogurt", amounts: ["1 container", "4 containers", "6 containers"] },
+      { part: "B", name: "Honey", amounts: ["3 fl. oz.", "12 fl. oz.", "18 fl. oz."] },
+    ],
+    yields: [
+      { label: "1.1 Quarts", orders: "5 orders @ 7 oz." },
+      { label: "1.1 Gallons", orders: "20 orders @ 7 oz." },
+      { label: "1.6 Gallons", orders: "30 orders @ 7 oz." },
+    ],
+    tools: ["Stainless Steel Bowl", "Measuring Cup", "13.5\" Spatula", "Whisk", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in and dry storage to make par.",
+      "<b>PART A:</b> Using a spatula empty the entire contents of yogurt container into large enough stainless-steel bowl.",
+      "<b>PART B:</b> Portion honey into bowl and whisk continuously until all ingredients are <b>WELL</b> combined.",
+      "Once thoroughly combined, spatula contents into proper container.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Monday"},{make:"Wednesday",use:"Tuesday"},{make:"Thursday",use:"Wednesday"},
+      {make:"Friday",use:"Thursday"},{make:"Saturday",use:"Friday"},{make:"Sunday",use:"Saturday"},{make:"Monday",use:"Sunday"}
+    ],
+  },
+  {
+    id: 22,
+    name: "Jalapeño Cheddar Smash Browns",
+    revised: "12/21/24",
+    prepTime: "12 min (Recipe 1)",
+    category: "baked",
+    batches: ["Recipe 1", "Recipe 2", "Recipe 3"],
+    ingredients: [
+      { part: "A", name: "Mayonnaise", amounts: ["3 oz.", "6 oz.", "15 oz."] },
+      { part: "A", name: "Salt", amounts: ["1 tsp.", "2 tsp.", "1 Tbsp. + 1 tsp."] },
+      { part: "A", name: "Pepper", amounts: ["1 tsp.", "2 tsp.", "1 Tbsp. + 1 tsp."] },
+      { part: "A", name: "Jalapeños (finely chopped 1/8\")", amounts: ["1 oz.", "2 oz.", "5 oz."] },
+      { part: "B", name: "Hash Brown Potatoes", amounts: ["2 lbs.", "4 lbs.", "10 lbs."] },
+      { part: "B", name: "Cheddar (chopped 1/2\")", amounts: ["5 oz.", "10 oz.", "1 lb. + 9 oz."] },
+    ],
+    yields: [
+      { label: "2.56 lbs.", orders: "6 orders @ 2 ea." },
+      { label: "5.12 lbs.", orders: "12 orders @ 2 ea." },
+      { label: "12.8 lbs.", orders: "29 orders @ 2 ea." },
+    ],
+    tools: ["Hotel Pan with Lid", "Digital Scale", "Measuring Spoons", "13.5\" Spatula", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in and dry storage to make par.",
+      "Preheat oven to 350°F.",
+      "<b>PART A:</b> Combine ingredients in large enough stainless steel bowl. Mix thoroughly using a wire whisk until all ingredients are <b>WELL</b> combined.",
+      "<b>PART B:</b> Add ingredients to bowl. Toss using gloved hands until all ingredients are <b>WELL</b> combined.",
+      "Using a DISHER Ivory, portion potato mixture onto parchment lined sheet pans. Portion the potatoes into small \"haystacks.\" Each haystack is 3.5 oz. in weight. <span class='warning'>Maximum 12 stacks per sheet pan.</span>",
+      "Bake haystacks at 350°F for 10 minutes.",
+      "Remove from the oven, using a griddle spatula, push down each haystack to flatten to 1/2\" thick.",
+      "Return the flattened potatoes to the oven for an additional 10 minutes.",
+      "Remove from the oven. Cool on the sheet pan on a rack in the walk-in.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Friday"},{make:"Wednesday",use:"Saturday"},{make:"Thursday",use:"Sunday"},
+      {make:"Friday",use:"Monday"},{make:"Saturday",use:"Tuesday"},{make:"Sunday",use:"Wednesday"},{make:"Monday",use:"Thursday"}
+    ],
+  },
+  {
+    id: 23,
+    name: "Lasagna – Baking, Portioning & Handling",
+    revised: "08/09/25",
+    prepTime: "50 min (Recipe 1)",
+    category: "baked",
+    batches: ["1 Tray", "2 Trays", "4 Trays"],
+    ingredients: [
+      { part: "A", name: "Lasagna (frozen)", amounts: ["1 Tray", "2 Trays", "4 Trays"] },
+    ],
+    yields: [
+      { label: "1 Tray", orders: "6 orders @ 12 oz." },
+      { label: "2 Trays", orders: "12 orders @ 12 oz." },
+      { label: "4 Trays", orders: "24 orders @ 12 oz." },
+    ],
+    tools: ["Cut Glove", "Cutting Board", "Chef Knife", "Plastic Wrap", "Shelf Life Labels", "Pancake Spatula"],
+    steps: [
+      "<span class='warning'>IMPORTANT: Ensure that the lasagna is completely thawed before proceeding. The lasagna takes approximately 24 hours to thaw in the walk-in, in a flat tray, in a single layer.</span>",
+      "Preheat the convection oven to 350°F.",
+      "<b>PART A:</b> Place the trays of thawed lasagna in a flat tray. Keep covered — lids are kept on through the baking process.",
+      "Bake the lasagna at 350°F following the cook time range (45–55 minutes).",
+      "At the 45-minute mark, remove the lid and check the temperature in the center using a digital thermometer. <span class='warning'>Lasagna is ready when the thermometer reads 185°F.</span>",
+      "Once baked, remove lids and place trays on a speed rack in the walk-in until completely cooled (~4 hours). <span class='warning'>Do not portion while still warm.</span>",
+      "<b>Portioning &amp; Handling:</b> With the lasagna cold, use a chef knife to divide the lasagna in half lengthwise.",
+      "Cut each half into thirds, creating 6 pieces per tray as pictured.",
+      "Using a metal spatula, carefully remove each piece of lasagna from the tray.",
+      "Wrap each piece individually with plastic wrap.",
+      "Label and date each piece individually as indicated in shelf life table and refrigerate.",
+      "Lasagna must be stored in a flat tray, on a speed rack, in a single layer. <span class='warning'>Maximum of 2 pieces stacked on top of each other.</span>",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Saturday"},{make:"Wednesday",use:"Sunday"},{make:"Thursday",use:"Monday"},
+      {make:"Friday",use:"Tuesday"},{make:"Saturday",use:"Wednesday"},{make:"Sunday",use:"Thursday"},{make:"Monday",use:"Friday"}
+    ],
+  },
+  {
+    id: 24,
+    name: "Marinated Beets",
+    revised: "03/29/25",
+    prepTime: "5 min (Recipe 1)",
+    category: "produce",
+    batches: ["Recipe 1", "Recipe 2", "Recipe 3"],
+    ingredients: [
+      { part: "A", name: "Beets (3/4–1\" pieces)", amounts: ["3 lbs. (3 packs)", "6 lbs. (6 packs)", "12 lbs. (12 packs)"] },
+      { part: "A", name: "Tajin", amounts: ["1 Tbsp.", "2 Tbsp.", "4 Tbsp."] },
+    ],
+    yields: [
+      { label: "3 Pounds", orders: "12 orders @ 4 oz." },
+      { label: "6 Pounds", orders: "24 orders @ 4 oz." },
+      { label: "12 Pounds", orders: "48 orders @ 4 oz." },
+    ],
+    tools: ["Stainless Steel Bowl", "Measuring Spoons", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in and dry storage to make par.",
+      "To cut the beets: Remove beets from packaging. Quarter beets vertically. Quarters less than 2\" in length are cut in half. Quarters longer than 2\" in length are cut into thirds.",
+      "<b>PART A:</b> Portion ingredients into large enough stainless steel bowl and toss continuously until all beets are <b>WELL</b> coated.",
+      "Once combined, transfer contents into appropriately sized container.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Friday"},{make:"Wednesday",use:"Saturday"},{make:"Thursday",use:"Sunday"},
+      {make:"Friday",use:"Monday"},{make:"Saturday",use:"Tuesday"},{make:"Sunday",use:"Wednesday"},{make:"Monday",use:"Thursday"}
+    ],
+  },
+  {
+    id: 25,
+    name: "Pasta – Cavatappi",
+    revised: "05/25/24",
+    prepTime: "15 min (Recipe 1)",
+    category: "pasta",
+    batches: ["Recipe 1 (3 lbs)", "Recipe 2 (4 lbs)", "Recipe 3 (5 lbs)"],
+    ingredients: [
+      { part: "A", name: "Cavatappi", amounts: ["3 lbs.", "4 lbs.", "5 lbs."] },
+      { part: "B", name: "Olive Oil", amounts: ["3 fl. oz.", "4 fl. oz.", "5 fl. oz."] },
+    ],
+    yields: [
+      { label: "6 Pounds", orders: "24 orders @ 4 oz." },
+      { label: "8 Pounds", orders: "32 orders @ 4 oz." },
+      { label: "10 Pounds", orders: "40 orders @ 4 oz." },
+    ],
+    tools: ["Pasta Basket", "13.5\" Spatula", "Stainless Steel Bowl", "Measuring Cup", "Digital Scale", "Day Bags with Stand", "Lined Sheet Pan(s)"],
+    steps: [
+      "Retrieve enough ingredients from dry storage to make par.",
+      "Fill pasta cooker to fill line, set to boil. <span class='warning'>Pasta cooker must be drained and cleaned after cooking 2 batches of pasta.</span>",
+      "<b>PART A:</b> Once water is boiling, pour pasta into the basket and use a spatula to stir. <span class='warning'>Maximum 5 lbs. of pasta can be cooked at a time, no exceptions.</span>",
+      "Select FastTimer setting Cavatappi and cook for 7–9 minutes, stir occasionally.",
+      "Pasta should be cooked through and firm (Al Dente = Wildflower standard). Taste and visually check before removing.",
+      "Lift pasta basket from boiling water and drain. Transfer to produce washing sink.",
+      "Run cold water over pasta for approximately 2 minutes to cool (70°F), stir and turn pasta throughout. <span class='warning'>In warmer months (May–October), add 1–2 scoops of ice to accelerate cooling.</span>",
+      "Allow to drain completely. Transfer into appropriately sized stainless-steel bowl.",
+      "<b>PART B:</b> Portion and add olive oil to bowl, toss with gloved hands until all pasta is completely coated.",
+      "Cover and refrigerate OR portion immediately.",
+      "<b>Portioning:</b> Place day bag on scale, set to \"0\". Portion 4 oz. into day bag. Loosely roll to close. Place day bags on a lined sheet pan and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Saturday"},{make:"Wednesday",use:"Sunday"},{make:"Thursday",use:"Monday"},
+      {make:"Friday",use:"Tuesday"},{make:"Saturday",use:"Wednesday"},{make:"Sunday",use:"Thursday"},{make:"Monday",use:"Friday"}
+    ],
+  },
+  {
+    id: 26,
+    name: "Pasta – Linguine",
+    revised: "05/25/24",
+    prepTime: "20 min (Recipe 1)",
+    category: "pasta",
+    batches: ["Recipe 1 (3 lbs)", "Recipe 2 (4 lbs)", "Recipe 3 (5 lbs)"],
+    ingredients: [
+      { part: "A", name: "Linguine", amounts: ["3 lbs.", "4 lbs.", "5 lbs."] },
+      { part: "B", name: "Olive Oil", amounts: ["3 fl. oz.", "4 fl. oz.", "5 fl. oz."] },
+    ],
+    yields: [
+      { label: "6 Pounds", orders: "12 orders @ 8 oz." },
+      { label: "8 Pounds", orders: "16 orders @ 8 oz." },
+      { label: "10 Pounds", orders: "20 orders @ 8 oz." },
+    ],
+    tools: ["Pasta Basket", "13.5\" Spatula", "Stainless Steel Bowl", "Measuring Cup", "Digital Scale", "Day Bags with Stand", "Lined Sheet Pan(s)"],
+    steps: [
+      "Retrieve enough ingredients from dry storage to make par.",
+      "Fill pasta cooker to fill line, set to boil. <span class='warning'>Pasta cooker must be drained and cleaned after cooking 2 batches of pasta.</span>",
+      "<b>PART A:</b> Once water is boiling, pour pasta into the basket and stir. <span class='warning'>Maximum 5 lbs. at a time.</span>",
+      "Select FastTimer setting Linguine and cook for 8–10 minutes, stir occasionally.",
+      "Pasta should be cooked through and firm (Al Dente). Taste and visually check before removing.",
+      "Lift pasta basket and drain. Transfer pasta basket to the produce washing sink.",
+      "Run cold water over pasta for approximately 2 minutes to cool (70°F). <span class='warning'>In warmer months (May–October), add 1–2 scoops of ice to accelerate cooling.</span>",
+      "Allow to drain completely. Transfer into stainless-steel bowl.",
+      "<b>PART B:</b> Add olive oil and toss with gloved hands until all pasta is coated.",
+      "<b>Portioning:</b> Place day bag on scale, set to \"0\". Portion 8 oz. into day bag. Loosely roll to close. Refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Saturday"},{make:"Wednesday",use:"Sunday"},{make:"Thursday",use:"Monday"},
+      {make:"Friday",use:"Tuesday"},{make:"Saturday",use:"Wednesday"},{make:"Sunday",use:"Thursday"},{make:"Monday",use:"Friday"}
+    ],
+  },
+  {
+    id: 27,
+    name: "Pasta – Penne",
+    revised: "05/25/24",
+    prepTime: "20 min (Recipe 1)",
+    category: "pasta",
+    batches: ["Recipe 1 (3 lbs)", "Recipe 2 (4 lbs)", "Recipe 3 (5 lbs)"],
+    ingredients: [
+      { part: "A", name: "Penne", amounts: ["3 lbs.", "4 lbs.", "5 lbs."] },
+      { part: "B", name: "Olive Oil", amounts: ["3 fl. oz.", "4 fl. oz.", "5 fl. oz."] },
+    ],
+    yields: [
+      { label: "6 Pounds", orders: "12 orders @ 8 oz." },
+      { label: "8 Pounds", orders: "16 orders @ 8 oz." },
+      { label: "10 Pounds", orders: "20 orders @ 8 oz." },
+    ],
+    tools: ["Pasta Basket", "13.5\" Spatula", "Stainless Steel Bowl", "Measuring Cup", "Digital Scale", "Day Bags with Stand", "Lined Sheet Pan(s)"],
+    steps: [
+      "Retrieve enough ingredients from dry storage to make par.",
+      "Fill pasta cooker to fill line, set to boil. <span class='warning'>Pasta cooker must be drained and cleaned after cooking 2 batches of pasta.</span>",
+      "<b>PART A:</b> Once water is boiling, pour pasta into the basket and stir. <span class='warning'>Maximum 5 lbs. at a time.</span>",
+      "Select FastTimer setting Penne and cook for 9–11 minutes, stir occasionally.",
+      "Pasta should be cooked through and firm (Al Dente). Taste and visually check before removing.",
+      "Lift pasta basket and drain. Transfer pasta basket to the produce washing sink.",
+      "Run cold water over pasta for approximately 2 minutes to cool. <span class='warning'>In warmer months add 1–2 scoops of ice to accelerate cooling.</span>",
+      "Allow to drain completely. Transfer into stainless-steel bowl.",
+      "<b>PART B:</b> Add olive oil and toss with gloved hands until all pasta is coated.",
+      "<b>Portioning:</b> Place day bag on scale, set to \"0\". Portion 8 oz. into day bag. Loosely roll to close. Refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Saturday"},{make:"Wednesday",use:"Sunday"},{make:"Thursday",use:"Monday"},
+      {make:"Friday",use:"Tuesday"},{make:"Saturday",use:"Wednesday"},{make:"Sunday",use:"Thursday"},{make:"Monday",use:"Friday"}
+    ],
+  },
+  {
+    id: 28,
+    name: "Pancake Batter – Banana Walnut",
+    revised: "12/21/24",
+    prepTime: "5 min (Recipe 1)",
+    category: "batter",
+    batches: ["Recipe 1", "Recipe 2"],
+    ingredients: [
+      { part: "A", name: "Gluten Free Pancake Batter", amounts: ["2 lbs. + 11 oz.", "8 lbs. + 8 oz."] },
+      { part: "A", name: "Bananas (1/4\" diced)", amounts: ["9 oz.", "1 lb. + 12 oz."] },
+      { part: "A", name: "Walnuts (toasted + chopped)", amounts: ["2.5 oz.", "8.4 oz."] },
+    ],
+    yields: [
+      { label: "3.4 Pounds", orders: "9 orders @ 6 oz." },
+      { label: "10.75 Pounds", orders: "28 orders @ 6 oz." },
+    ],
+    tools: ["Stainless Steel Bowl", "Digital Scale", "Cut Glove", "Cutting Board", "Chef's Knife", "13.5\" Spatula", "Whisk", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from dry storage and walk-in to make par.",
+      "<b>PART A:</b> Using a digital scale, portion ingredients into a large enough stainless-steel bowl.",
+      "Using a chef knife, cut bananas into 1/4\" diced pieces.",
+      "Whisk continuously until all ingredients are <b>WELL</b> combined.",
+      "Once thoroughly combined, spatula contents into proper container.",
+      "Cover, label, and refrigerate.",
+      "<span class='warning'>Shelf Life: 8 Hours. PANCAKE BATTER IS TO BE USED FOR SAME DAY SERVICE ONLY. THROW OUT ANY REMAINING PANCAKE BATTER AT THE END OF BREAKFAST.</span>",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Tuesday"},{make:"Wednesday",use:"Wednesday"},{make:"Thursday",use:"Thursday"},
+      {make:"Friday",use:"Friday"},{make:"Saturday",use:"Saturday"},{make:"Sunday",use:"Sunday"},{make:"Monday",use:"Monday"}
+    ],
+  },
+  {
+    id: 29,
+    name: "Pancake Batter – Lemon Ricotta",
+    revised: "06/06/20",
+    prepTime: "5 min (small batch)",
+    category: "batter",
+    batches: ["Small Batch", "Large Batch"],
+    ingredients: [
+      { part: "A", name: "Pancake Batter", amounts: ["4 lbs. + 4 oz.", "8 lbs. + 8 oz."] },
+      { part: "A", name: "Ricotta", amounts: ["14 oz.", "1 lb. + 12 oz."] },
+      { part: "A", name: "Lemon Zest", amounts: ["4.2 oz.", "8.4 oz."] },
+    ],
+    yields: [
+      { label: "5.4 Pounds", orders: "14 orders @ 6 oz." },
+      { label: "10.75 Pounds", orders: "28 orders @ 6 oz." },
+    ],
+    tools: ["Stainless Steel Bowl", "Digital Scale", "13.5\" Spatula", "Whisk", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from dry storage and walk-in to make par.",
+      "<b>PART A:</b> Using a digital scale, portion ingredients into a large enough stainless-steel bowl.",
+      "Whisk continuously until all ingredients are <b>WELL</b> combined.",
+      "Once thoroughly combined, spatula contents into proper container.",
+      "Cover, label, and refrigerate.",
+      "<span class='warning'>Shelf Life: 8 Hours. PANCAKE BATTER IS TO BE USED FOR SAME DAY SERVICE ONLY. THROW OUT ANY REMAINING PANCAKE BATTER AT THE END OF BREAKFAST.</span>",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Tuesday"},{make:"Wednesday",use:"Wednesday"},{make:"Thursday",use:"Thursday"},
+      {make:"Friday",use:"Friday"},{make:"Saturday",use:"Saturday"},{make:"Sunday",use:"Sunday"},{make:"Monday",use:"Monday"}
+    ],
+  },
+  {
+    id: 30,
+    name: "Pancake Batter – Traditional",
+    revised: "08/01/20",
+    prepTime: "12 min (small batch)",
+    category: "batter",
+    batches: ["Small Batch (1 lb)", "Medium Batch (3 lbs)", "Large Batch (5 lbs)"],
+    ingredients: [
+      { part: "A", name: "Dry Pancake Mix", amounts: ["1 lb.", "3 lbs.", "5 lbs. (1 bag)"] },
+      { part: "B", name: "Buttermilk", amounts: ["2 Cups + 2 fl. oz.", "1 Quart + 2 Cups + 6 fl. oz.", "2 Quarts + 3 Cups + 2 fl. oz."] },
+      { part: "B", name: "Cold Filtered Water", amounts: ["5 fl. oz.", "1 Cup + 7 fl. oz.", "3 Cups + 1 fl. oz."] },
+      { part: "B", name: "Liquid Eggs", amounts: ["3 fl. oz.", "1 Cup + 1 fl. oz.", "1 Cup + 7 fl. oz."] },
+      { part: "B", name: "Vegetable Oil", amounts: ["2 Tbsp.", "3 fl. oz.", "5 fl. oz."] },
+      { part: "B", name: "Vanilla Extract", amounts: ["2 tsp.", "2 Tbsp.", "3 Tbsp. + 1 tsp."] },
+    ],
+    yields: [
+      { label: "2.7 Pounds", orders: "7 orders @ 6 oz." },
+      { label: "8.3 Pounds", orders: "22 orders @ 6 oz." },
+      { label: "13.8 Pounds", orders: "36 orders @ 6 oz." },
+    ],
+    tools: ["Digital Scale", "Measuring Cup", "Measuring Spoons", "Stainless Steel Bowl", "Container with Lid", "13.5\" Spatula", "Whisk", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from dry storage and walk-in to make par.",
+      "<b>PART A:</b> Using a digital scale, portion dry pancake mix into a large enough stainless-steel bowl.",
+      "<b>PART B:</b> Portion ingredients into bowl and whisk continuously until all ingredients are combined. <span class='warning'>DO NOT OVER MIX.</span>",
+      "Once thoroughly combined, spatula contents into proper container.",
+      "Cover, label, and refrigerate.",
+      "<span class='warning'>Shelf Life: 36 Hours. PANCAKE BATTER CAN BE USED FOR TWO DAY SERVICE ONLY. DISCARD ANY REMAINING PANCAKE BATTER AFTER 36 HOURS.</span>",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Wednesday"},{make:"Wednesday",use:"Thursday"},{make:"Thursday",use:"Friday"},
+      {make:"Friday",use:"Saturday"},{make:"Saturday",use:"Sunday"},{make:"Sunday",use:"Monday"},{make:"Monday",use:"Tuesday"}
+    ],
+  },
+  {
+    id: 31,
+    name: "Pesto Vinaigrette",
+    revised: "06/06/20",
+    prepTime: "5 min (small batch)",
+    category: "dressing",
+    batches: ["Small Batch", "Medium Batch", "Large Batch"],
+    ingredients: [
+      { part: "A", name: "Cilantro Lime Vinaigrette", amounts: ["1 Bag (0.5 gal.) + 1 Quart", "3 Bags (1.5 gals.)", "6 Bags (3 gals.)"] },
+      { part: "A", name: "Ranch", amounts: ["1 Quart", "1 Bag (0.5 gal.)", "2 Bags (1 gal.)"] },
+      { part: "A", name: "Pesto", amounts: ["1 Quart", "2 Quarts", "1 Gallon"] },
+    ],
+    yields: [
+      { label: "1.25 Gallons", orders: "80 orders @ 2 fl. oz." },
+      { label: "2.5 Gallons", orders: "160 orders @ 2 fl. oz." },
+      { label: "5 Gallons", orders: "320 orders @ 2 fl. oz." },
+    ],
+    tools: ["Container with Lid", "Measuring Cup", "Whisk", "13.5\" Spatula", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in to make par.",
+      "<b>PART A:</b> Portion ingredients into a large enough container and whisk continuously until all ingredients are <b>WELL</b> combined. Use a spatula to scrape the sides to ensure all ingredients are well combined.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Monday"},{make:"Wednesday",use:"Tuesday"},{make:"Thursday",use:"Wednesday"},
+      {make:"Friday",use:"Thursday"},{make:"Saturday",use:"Friday"},{make:"Sunday",use:"Saturday"},{make:"Monday",use:"Sunday"}
+    ],
+  },
+  {
+    id: 32,
+    name: "Pickles – 1/8\"–3/16\" Sliced",
+    revised: "06/06/20",
+    prepTime: "3 min (1 each)",
+    category: "produce",
+    batches: ["Per Pickle"],
+    ingredients: [
+      { part: "A", name: "Pickles", amounts: ["1 oz. per portion (4 slices) / 1/8\"–3/16\" thick / 18–20 slices per pickle"] },
+    ],
+    yields: [
+      { label: "8 oz. avg.", orders: "16 orders @ 0.5 oz." },
+    ],
+    tools: ["Cut Glove", "Cutting Board", "Chef's Knife", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in to make par.",
+      "<b>PART A:</b> Using a chef's knife, position knife at a 45° angle along the bias of the pickle and cut 1/8\"–3/16\" thick slices.",
+      "Transfer into appropriate container.",
+      "<span class='warning'>Sliced pickles must be completely covered in pickle juice.</span>",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Saturday"},{make:"Wednesday",use:"Sunday"},{make:"Thursday",use:"Monday"},
+      {make:"Friday",use:"Tuesday"},{make:"Saturday",use:"Wednesday"},{make:"Sunday",use:"Thursday"},{make:"Monday",use:"Friday"}
+    ],
+  },
+  {
+    id: 33,
+    name: "Plant-Based Chicken Portions",
+    revised: "06/06/20",
+    prepTime: "12–24 min (16–48 portions)",
+    category: "protein",
+    batches: ["2.5 lb Case (16 portions)", "7.5 lb Case (48 portions)"],
+    ingredients: [
+      { part: "A", name: "Plant-Based Chicken", amounts: ["2.5 lb case / 16 portions @ 2.5 oz.", "7.5 lb case / 48 portions @ 2.5 oz."] },
+    ],
+    yields: [
+      { label: "16 Portions", orders: "16 orders @ 2.5 oz." },
+      { label: "48 Portions", orders: "48 orders @ 2.5 oz." },
+    ],
+    tools: ["Gloves", "Lined Sheet Pan(s)", "Digital Scale", "Day Bags with Stand"],
+    steps: [
+      "Retrieve enough ingredients from walk-in to make par.",
+      "<b>PART A:</b> Remove Plant-Based Chicken from bag and place on a parchment lined sheet pan.",
+      "Use gloved hands to break up larger pieces, breakdown into approximately 1/2\" × 1/2\" pieces. <span class='warning'>No pieces larger than 1\" × 1\".</span>",
+      "Repeat steps A–C for quantity needed to make par.",
+      "Place day bag on scale and set to read \"0\" zero. See shelf life table for the correct day bag.",
+      "Portion according to the portion weight indicated in the table.",
+      "Place portions on clean prep table. Roll day bag to close.",
+      "Place day bags on a lined sheet pan and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Thursday"},{make:"Wednesday",use:"Friday"},{make:"Thursday",use:"Saturday"},
+      {make:"Friday",use:"Sunday"},{make:"Saturday",use:"Monday"},{make:"Sunday",use:"Tuesday"},{make:"Monday",use:"Wednesday"}
+    ],
+  },
+  {
+    id: 34,
+    name: "Potato & Peppers Portions",
+    revised: "02/24/24",
+    prepTime: "6 min (Recipe 1)",
+    category: "other",
+    batches: ["1 Portion", "Recipe 1 (10 portions)", "Recipe 2 (20 portions)"],
+    ingredients: [
+      { part: "A", name: "Home Fries (roasted & cooled)", amounts: ["5 oz.", "3 lbs. + 2 oz.", "6 lbs. + 4 oz."] },
+      { part: "A", name: "Poblano Peppers", amounts: ["1 oz.", "10 oz.", "1 lb. + 4 oz."] },
+      { part: "A", name: "Roasted Red Bell Peppers", amounts: ["1 oz.", "10 oz.", "1 lb. + 4 oz."] },
+      { part: "A", name: "Caramelized Onions", amounts: ["1 oz.", "10 oz.", "1 lb. + 4 oz."] },
+    ],
+    yields: [
+      { label: "1 Portion", orders: "1 order @ 8 oz." },
+      { label: "10 Portions", orders: "10 orders @ 8 oz." },
+      { label: "20 Portions", orders: "20 orders @ 8 oz." },
+    ],
+    tools: ["Digital Scale", "Day Bags with Stand", "Lined Sheet Pan(s)"],
+    steps: [
+      "Retrieve enough ingredients from the walk-in to make par.",
+      "<b>PART A:</b> Place day bag on digital scale and set to read \"0\" zero. See shelf life table for the correct day bag.",
+      "Portion each ingredient in order listed into day bag.",
+      "Use dominant hand to grab and portion ingredient(s) and use non-dominant un-gloved hand to handle day bags.",
+      "Repeat steps A–C for all portions. Place portions on clean prep table.",
+      "To close portion bags, lightly roll portion and turn over flap to close. <span class='warning'>Do not twist day bags to close.</span>",
+      "Place day bags on a lined sheet pan and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Friday"},{make:"Wednesday",use:"Saturday"},{make:"Thursday",use:"Sunday"},
+      {make:"Friday",use:"Monday"},{make:"Saturday",use:"Tuesday"},{make:"Sunday",use:"Wednesday"},{make:"Monday",use:"Thursday"}
+    ],
+  },
+  {
+    id: 35,
+    name: "Pepper Relish",
+    revised: "12/10/22",
+    prepTime: "12 min (Recipe 1)",
+    category: "other",
+    batches: ["Recipe 1", "Recipe 2", "Recipe 3"],
+    ingredients: [
+      { part: "A", name: "Mama Lil's Peppers (drained & 1/4\" diced)", amounts: ["1 lb.", "2 lb.", "4 lb."] },
+      { part: "A", name: "Pickles (1/4\" diced)", amounts: ["6 oz.", "12 oz.", "1 lb. + 8 oz."] },
+      { part: "A", name: "Red Onion (1/4\" diced)", amounts: ["6 oz.", "12 oz.", "1 lb. + 8 oz."] },
+      { part: "B", name: "Mama Lil's Pepper Oil", amounts: ["2 fl. oz.", "4 fl. oz.", "8 fl. oz."] },
+    ],
+    yields: [
+      { label: "1.8 lbs.", orders: "22 orders @ 1.2 oz." },
+      { label: "3.6 lbs.", orders: "44 orders @ 1.2 oz." },
+      { label: "7.2 lbs.", orders: "88 orders @ 1.2 oz." },
+    ],
+    tools: ["Stainless Steel Bowl", "Measuring Cup", "13.5\" Spatula", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in and dry storage to make par.",
+      "<b>PART A:</b> Using a chef knife and easy chopper: slice pickles 1/4\" thick; quarter the red onions; dice all ingredients to 1/4\".",
+      "Portion ingredients into large enough stainless steel bowl and mix with a rubber spatula until all ingredients are <b>WELL</b> combined.",
+      "<b>PART B:</b> Portion into bowl and mix until all ingredients are <b>WELL</b> combined.",
+      "Once combined, spatula contents into appropriately sized container.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Any Day",use:"14 Days from Make Day"},
+    ],
+  },
+  {
+    id: 36,
+    name: "Red Bell Peppers – 1/2\" Diced",
+    revised: "06/06/20",
+    prepTime: "30 min (1 case)",
+    category: "produce",
+    batches: ["Per Pepper"],
+    ingredients: [
+      { part: "A", name: "Red Bell Pepper (1/2\" diced)", amounts: ["1 each / 3.75–4.25 oz. yield / 5–6 each = 1 quart"] },
+    ],
+    yields: [
+      { label: "1 each", orders: "3.75–4.25 oz." },
+      { label: "5–6 each", orders: "1 quart" },
+    ],
+    tools: ["Easy Chopper", "1/2\" Dicer Blade", "Cutting Board", "Cut Glove", "Chef Knife", "Container with Lid", "Hotel Pan", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from the walk-in to make par.",
+      "<b>PART A:</b> Using a chef knife cut all red bell peppers in half lengthwise. Remove the stem, seeds and membranes.",
+      "Ensure 1/2\" dicer blade, push block and bumpers are in place and secured. Place easy chopper into appropriate size hotel pan.",
+      "Use your non-dominate hand to place the red bell pepper cut side down onto the dicer blade. Remove hand away from easy chopper.",
+      "Using your dominate hand to bring the push block down to force the red bell peppers through the dicer blades in one motion.",
+      "Place in appropriate container with lid. Cover, label, date as indicated in shelf life table and refrigerate.",
+      "Clean and sanitize easy chopper in the 3-compartment sink. <span class='warning'>Never clean easy chopper in dishwasher.</span>",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Thursday"},{make:"Wednesday",use:"Friday"},{make:"Thursday",use:"Saturday"},
+      {make:"Friday",use:"Sunday"},{make:"Saturday",use:"Monday"},{make:"Sunday",use:"Tuesday"},{make:"Monday",use:"Wednesday"}
+    ],
+  },
+  {
+    id: 37,
+    name: "Red Onions – 1/16\" Sliced",
+    revised: "06/06/20",
+    prepTime: "8 min (small batch)",
+    category: "produce",
+    batches: ["Small Batch (~1 lb)"],
+    ingredients: [
+      { part: "A", name: "Red Onions (1/16\" sliced)", amounts: ["1 lb. raw / 0.5 oz. portion / 32 portions"] },
+    ],
+    yields: [
+      { label: "1 Pound", orders: "32 portions @ 0.5 oz." },
+    ],
+    tools: ["Cutting Board", "Cut Glove", "Chef's Knife", "Slicer", "Hotel Pan", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from dry storage or walk-in to make par.",
+      "<b>PART A:</b> Using a chef knife cut approximately 1/8\" off of both ends. Peel the outer layer of skin off the onion.",
+      "Place on slicer with the cut side facing the slicer blade.",
+      "Slice according to slicer standards indicated in table. <span class='warning'>Slicer number is determined & recorded by the General Manager.</span>",
+      "Transfer into appropriate container. Cover, label, date as indicated in shelf life table and refrigerate.",
+      "Clean and sanitize slicer prior to next use.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Wednesday"},{make:"Wednesday",use:"Thursday"},{make:"Thursday",use:"Friday"},
+      {make:"Friday",use:"Saturday"},{make:"Saturday",use:"Sunday"},{make:"Sunday",use:"Monday"},{make:"Monday",use:"Tuesday"}
+    ],
+  },
+  {
+    id: 38,
+    name: "Roasted Brussels Sprouts",
+    revised: "05/28/22",
+    prepTime: "10 min (Recipe 1)",
+    category: "baked",
+    batches: ["Recipe 1", "Recipe 2", "Recipe 3"],
+    ingredients: [
+      { part: "A", name: "Brussels Sprouts", amounts: ["3 lbs.", "6 lbs.", "12 lbs."] },
+      { part: "B", name: "Olive Oil", amounts: ["3 fl. oz.", "6 fl. oz.", "12 fl. oz."] },
+      { part: "B", name: "Salt", amounts: ["2 tsp.", "4 tsp.", "8 tsp."] },
+      { part: "B", name: "Black Pepper", amounts: ["1/2 tsp.", "1 tsp.", "2 tsp."] },
+    ],
+    yields: [
+      { label: "2 Pounds", orders: "8 orders @ 4 oz." },
+      { label: "4 Pounds", orders: "16 orders @ 4 oz." },
+      { label: "8 Pounds", orders: "32 orders @ 4 oz." },
+    ],
+    tools: ["Digital Scale", "Stainless Steel Bowl", "Measuring Spoons", "3 fl. oz. Ladle", "Lined Sheet Pan(s)", "Cut Glove", "Cutting Board", "Chef's Knife", "Shelf Life Labels"],
+    steps: [
+      "Preheat convection oven to 400°F.",
+      "Retrieve enough ingredients from dry storage and walk-in to make par.",
+      "<b>PART A:</b> Using a chef's knife remove approximately 1/4\" of the Brussels sprouts stem. Cut Brussels sprouts: Quarters = Large (>1.5\"); Halves = 1.5\" or smaller.",
+      "Using a digital scale, portion Brussels sprouts into appropriate size stainless steel bowl.",
+      "<b>PART B:</b> Portion into bowl and mix continuously until all ingredients are <b>WELL</b> combined.",
+      "Place Brussels sprouts on a parchment lined sheet pan in a single layer. <span class='warning'>Maximum 6 lb. batch per sheet pan.</span>",
+      "Bake at 400°F following the cook time range. Adjust cook time using the color first. <span class='warning'>Every piece should have dark brown and/or black coloring.</span>",
+      "Test: taste should be soft (tender) and cooked through. Remove from oven and cool.",
+      "Once cool, portion immediately at 4 oz. See shelf life table for the correct day bag.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Thursday"},{make:"Wednesday",use:"Friday"},{make:"Thursday",use:"Saturday"},
+      {make:"Friday",use:"Sunday"},{make:"Saturday",use:"Monday"},{make:"Sunday",use:"Tuesday"},{make:"Monday",use:"Wednesday"}
+    ],
+  },
+  {
+    id: 39,
+    name: "Salmon Crumble Portions",
+    revised: "07/18/20",
+    prepTime: "8 min (small batch)",
+    category: "seafood",
+    batches: ["Small Batch (1 portion)", "Medium (3 lbs / 20 portions)", "Large (6 lbs / 41 portions)"],
+    ingredients: [
+      { part: "A", name: "Salmon", amounts: ["2 oz.", "3 lbs.", "6 lbs."] },
+    ],
+    yields: [
+      { label: "1 Portion", orders: "1 portion @ 2 oz." },
+      { label: "20 Portions", orders: "20 portions @ 2 oz." },
+      { label: "41 Portions", orders: "41 portions @ 2 oz." },
+    ],
+    tools: ["Stainless Steel Bowl", "Digital Scale", "Day Bags with Stand", "Lined Sheet Pan"],
+    steps: [
+      "<span class='warning'>SALMON MUST BE COMPLETELY THAWED BEFORE PREPARATION. See the Salmon Thawing & Fillet Portions prep procedure for proper thawing.</span>",
+      "Retrieve enough defrosted salmon from walk-in to make par.",
+      "<b>PART A:</b> Remove the fully defrosted salmon using the perforated drain insert, shaking off any excess liquid.",
+      "Transfer the drained salmon to an appropriately sized stainless-steel bowl.",
+      "Using gloved hands, break apart salmon fillets. <span class='warning'>DO NOT MASH OR PUREE.</span>",
+      "Place day bag on scale and set to read \"0\" (zero). See shelf life table for the correct day bag.",
+      "Portion each ingredient into day bag. Use your dominant hand to grab and portion; use your non-dominant hand to handle day bags.",
+      "Place portions on clean prep table. To close portion bags, lightly roll portion and turn over flap to close. <span class='warning'>Do not twist day bags to close.</span>",
+      "Place day bags on a lined sheet pan and refrigerate. Label with the use by day indicated on the green thawing tub.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Thursday"},{make:"Wednesday",use:"Friday"},{make:"Thursday",use:"Saturday"},
+      {make:"Friday",use:"Sunday"},{make:"Saturday",use:"Monday"},{make:"Sunday",use:"Tuesday"},{make:"Monday",use:"Wednesday"}
+    ],
+  },
+  {
+    id: 40,
+    name: "Salmon Thawing & Fillet Portions",
+    revised: "06/06/20",
+    prepTime: "5 min (small batch)",
+    category: "seafood",
+    batches: ["1 each", "12 each (3 packages)", "24 each (6 packages)"],
+    ingredients: [
+      { part: "A", name: "Salmon", amounts: ["1 each @ 3.6 oz.", "12 each @ 3.6 oz.", "24 each @ 3.6 oz."] },
+    ],
+    yields: [
+      { label: "1 Portion", orders: "1 portion @ 3.6 oz." },
+      { label: "12 Portions", orders: "12 portions @ 3.6 oz." },
+      { label: "24 Portions", orders: "24 portions @ 3.6 oz." },
+    ],
+    tools: ["Day Bags with Stand", "Hotel Pan"],
+    steps: [
+      "Salmon arrives frozen and takes <b>36 hours</b> to defrost when properly thawed.",
+      "To thaw salmon: Use scissors to open bags of salmon. Remove all portions with gloved hands and gently place in the dedicated green 3-piece drain container, stacking the fillets 5 high.",
+      "Before placing in the refrigerator, label the bin with the date and time thawing started. Immediately refrigerate all green bins stacking with the container's lids.",
+      "<span class='warning'>NEVER USE ANY RUNNING WATER TO DEFROST. NEVER THAW SALMON PORTIONS IN THE ORIGINAL CASE OR PACKAGING FROM THE MANUFACTURER.</span>",
+      "<b>Portioning Salmon Fillets:</b> Once salmon has fully thawed, portion as indicated above into day bag.",
+      "To close portion bags, lightly roll and turn over the top flap to close. Place day bags in hotel pan and refrigerate.",
+      "Label according to the shelf life table. <b>The 'thaw day' is the date from the start of thawing the salmon.</b>",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Saturday"},{make:"Wednesday",use:"Sunday"},{make:"Thursday",use:"Monday"},
+      {make:"Friday",use:"Tuesday"},{make:"Saturday",use:"Wednesday"},{make:"Sunday",use:"Thursday"},{make:"Monday",use:"Friday"}
+    ],
+  },
+  {
+    id: 41,
+    name: "Smoked Salmon Portioning & Handling",
+    revised: "12/21/24",
+    prepTime: "8 min",
+    category: "seafood",
+    batches: ["1 Portion", "1 Side (2.5 lbs / 16 portions)", "2 Sides (5 lbs / 32 portions)"],
+    ingredients: [
+      { part: "A", name: "Smoked Salmon", amounts: ["2.5 oz.", "1 Side (2.5 lbs.)", "2 Sides (5 lbs.)"] },
+    ],
+    yields: [
+      { label: "1 Portion", orders: "1 portion @ 2.5 oz." },
+      { label: "16 Portions", orders: "16 portions @ 2.5 oz." },
+      { label: "32 Portions", orders: "32 portions @ 2.5 oz." },
+    ],
+    tools: ["Chef's Knives", "Cut Glove", "Cutting Board", "Digital Scale", "Patty Paper", "Shelf-Life Labels"],
+    steps: [
+      "Ensure the salmon is fully thawed.",
+      "Remove the salmon from the cryovac packaging. Leave the salmon on the cardboard backing until fully portioned. Cut the side in half to make portioning easier.",
+      "Using a chef's knife, cut the side of salmon in half along its entire length.",
+      "Set a digital scale to zero. Place a square of patty paper on the scale.",
+      "Portion 2.5 oz. of smoked salmon onto the patty paper in a thin layer that will completely cover the area of a bagel.",
+      "Repeat until all salmon is portioned. Arrange portions in stacks of 6. Wrap each 6 pack tightly in plastic wrap.",
+      "Label, date as indicated in the shelf life table and refrigerate.",
+      "<span class='warning'>PORTIONED SALMON MAY ONLY BE RE-FROZEN AND THAWED ONE TIME. AFTER THIS, ANY UNUSED SALMON MUST BE DISCARDED.</span>",
+      "<span class='warning'>Smoked salmon is a ready to eat product, however, it is technically uncooked and should be stored on the bottom shelf of the walk-in as you do for eggs.</span>",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Saturday"},{make:"Wednesday",use:"Sunday"},{make:"Thursday",use:"Monday"},
+      {make:"Friday",use:"Tuesday"},{make:"Saturday",use:"Wednesday"},{make:"Sunday",use:"Thursday"},{make:"Monday",use:"Friday"}
+    ],
+  },
+  {
+    id: 42,
+    name: "Tuna Salad",
+    revised: "10/26/24",
+    prepTime: "15 min (Recipe 1)",
+    category: "seafood",
+    batches: ["Recipe 1 (1 pack)", "Recipe 2 (3 packs)", "Recipe 3 (6 packs)"],
+    ingredients: [
+      { part: "A", name: "Tuna", amounts: ["1 pack (2 lbs. + 11 oz.)", "3 packs (8 lbs. + 1 oz.)", "6 packs (16 lbs. + 2 oz.)"] },
+      { part: "B", name: "Hickory Smoked Almonds (1/4\"–3/8\" chopped)", amounts: ["6 oz.", "1 lb. + 2 oz.", "2 lbs. + 4 oz."] },
+      { part: "C", name: "Apples (1/2\" diced)", amounts: ["12 oz.", "2 lbs. + 4 oz.", "4 lbs. + 8 oz."] },
+      { part: "D", name: "Mayonnaise", amounts: ["1 lb. + 4 oz.", "3 lbs. + 12 oz.", "7 lbs. + 8 oz."] },
+      { part: "D", name: "Celery (1/4\" diced)", amounts: ["8 oz.", "1 lb. + 8 oz.", "3 lbs."] },
+      { part: "D", name: "Green Onion (1/8\" sliced)", amounts: ["2 oz.", "6 oz.", "12 oz."] },
+    ],
+    yields: [
+      { label: "5.6 Pounds", orders: "19 orders @ 4.6 oz." },
+      { label: "17.1 Pounds", orders: "59 orders @ 4.6 oz." },
+      { label: "34.1 Pounds", orders: "118 orders @ 4.6 oz." },
+    ],
+    tools: ["Cut Glove", "Cutting Board", "Chef Knife", "Stainless Steel Bowl", "Easy Chopper", "1/2\" Dicer Blade", "Hotel Pan", "Digital Scale", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from dry storage and walk-in to make par.",
+      "<b>PART A:</b> Open required number of packs of tuna. <span class='warning'>DO NOT DRAIN.</span> Transfer tuna to large enough stainless steel bowl.",
+      "<b>PART B:</b> Using a chef knife, roughly chop almonds into 1/4\"–3/8\" pieces.",
+      "<b>PART C:</b> Using easy chopper with 1/2\" dicer blade, dice apples. Immediately disassemble, clean, and sanitize easy chopper in 3-compartment sink. <span class='warning'>Never clean in dishwasher.</span>",
+      "<b>PART D:</b> Portion remaining ingredients into bowl.",
+      "Mix with gloved hands continuously until all ingredients are <b>WELL</b> combined. Spatula contents into proper container.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Friday"},{make:"Wednesday",use:"Saturday"},{make:"Thursday",use:"Sunday"},
+      {make:"Friday",use:"Monday"},{make:"Saturday",use:"Tuesday"},{make:"Sunday",use:"Wednesday"},{make:"Monday",use:"Thursday"}
+    ],
+  },
+  {
+    id: 43,
+    name: "Steak – Sliced",
+    revised: "04/09/22",
+    prepTime: "12 min (24 portions)",
+    category: "protein",
+    batches: ["Sandwich (4 oz.)", "Salad (3 oz.)"],
+    ingredients: [
+      { part: "A", name: "Flank Steak – Sandwich", amounts: ["4 oz. / 1/16\" slicer / 12–13 slices per portion / avg. 2 lbs. = 7 orders @ 4 oz.", "—"] },
+      { part: "A", name: "Flank Steak – Salad", amounts: ["—", "3 oz. / 3/16\" by hand / 5–8 slices per portion / avg. 2 lbs. = 10 orders @ 3 oz."] },
+    ],
+    yields: [
+      { label: "~2 lbs. avg.", orders: "7 orders @ 4 oz. (sandwich)" },
+      { label: "~2 lbs. avg.", orders: "10 orders @ 3 oz. (salad)" },
+    ],
+    tools: ["Cut Glove", "Cutting Board", "Chef Knife", "Slicer", "Digital Scale", "Day Bags", "Lined Sheet Pan"],
+    steps: [
+      "Retrieve enough ingredients from walk-in to make par.",
+      "<b>PART A – FOR SANDWICHES:</b> Remove from packaging and drain any liquid.",
+      "Cut in half against the grain as pictured.",
+      "Place both halves on slicer with the cut side facing the slicer blade.",
+      "Slice according to slicer standards indicated in table. <span class='warning'>Slicer number is determined & recorded by the General Manager.</span>",
+      "Place day bag on scale and set to read \"0\" zero. See shelf life table for the correct day bag. Portion according to the portion weight indicated.",
+      "Sliced meat is placed loosely in day bags, not stacked or folded. Lightly roll and turn over flap to close. <span class='warning'>Do not twist day bags.</span>",
+      "Place day bags on a lined sheet pan and refrigerate.",
+      "<b>FOR SALADS (3/16\" by hand):</b> Follow same steps but cut 3/16\" thick slices by hand. Portion at 3 oz.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Thursday"},{make:"Wednesday",use:"Friday"},{make:"Thursday",use:"Saturday"},
+      {make:"Friday",use:"Sunday"},{make:"Saturday",use:"Monday"},{make:"Sunday",use:"Tuesday"},{make:"Monday",use:"Wednesday"}
+    ],
+  },
+  {
+    id: 44,
+    name: "Swiss Cheese – 1/16\" Sliced",
+    revised: "06/06/20",
+    prepTime: "12 min (24 portions)",
+    category: "cheese",
+    batches: ["Per Piece"],
+    ingredients: [
+      { part: "A", name: "Swiss", amounts: ["1.5 oz. portion / 1/16\" thick / 4 slices per portion / avg. 8 lbs. = 81 orders @ 1.5 oz."] },
+    ],
+    yields: [
+      { label: "~8 Pounds avg.", orders: "81 orders @ 1.5 oz." },
+    ],
+    tools: ["Cut Glove", "Cutting Board", "Slicer", "Digital Scale", "Deli Paper", "Plastic Wrap", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in to make par.",
+      "<b>PART A:</b> Remove from packaging. Place on slicer and secure with meat hooks.",
+      "Slice according to slicer standards indicated in table. <span class='warning'>Slicer number is determined & recorded by the General Manager.</span>",
+      "Place deli paper on scale and set to read \"0\" zero.",
+      "Portion according to the portion weight indicated. Place deli paper in between each portion. Repeat for all portions.",
+      "Wrap 8 portions together with plastic wrap.",
+      "Label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Thursday"},{make:"Wednesday",use:"Friday"},{make:"Thursday",use:"Saturday"},
+      {make:"Friday",use:"Sunday"},{make:"Saturday",use:"Monday"},{make:"Sunday",use:"Tuesday"},{make:"Monday",use:"Wednesday"}
+    ],
+  },
+  {
+    id: 45,
+    name: "Cilantro Aioli",
+    revised: "06/19/21",
+    prepTime: "6 min (small batch)",
+    category: "sauce",
+    batches: ["Small Batch (1 qt)", "Medium Batch (1 gal)", "Large Batch (2 gal)"],
+    ingredients: [
+      { part: "A", name: "Mayonnaise", amounts: ["1 Quart", "1 Gallon", "2 Gallons"] },
+      { part: "A", name: "Spicy Cilantro Sauce (Skhug)", amounts: ["15 oz.", "3 lbs. 12 oz.", "7 lbs. 8 oz."] },
+    ],
+    yields: [
+      { label: "1.5 Quarts", orders: "22 orders @ 2.1 oz." },
+      { label: "1.5 Gallons", orders: "89 orders @ 2.1 oz." },
+      { label: "3 Gallons", orders: "179 orders @ 2.1 oz." },
+    ],
+    tools: ["Digital Scale", "Stainless Steel Bowl", "Whisk", "13.5\" Spatula", "Container with Lid", "Shelf-Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in and dry storage to make par.",
+      "<b>PART A:</b> Portion into a large enough stainless-steel bowl and whisk continuously until all ingredients are <b>WELL</b> combined.",
+      "Cover, label, date as indicated in shelf-life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Monday"},{make:"Wednesday",use:"Tuesday"},{make:"Thursday",use:"Wednesday"},
+      {make:"Friday",use:"Thursday"},{make:"Saturday",use:"Friday"},{make:"Sunday",use:"Saturday"},{make:"Monday",use:"Sunday"}
+    ],
+  },
+  {
+    id: 46,
+    name: "Citrus Hot Honey",
+    revised: "03/29/25",
+    prepTime: "5 min (Recipe 1)",
+    category: "sauce",
+    batches: ["Recipe 1", "Recipe 2", "Recipe 3"],
+    ingredients: [
+      { part: "A", name: "Honey", amounts: ["1 Quart", "2 Quarts", "3 Quarts"] },
+      { part: "A", name: "Sriracha", amounts: ["4 fl. oz.", "1 Cup", "1½ Cups"] },
+      { part: "A", name: "Lime Juice", amounts: ["4 fl. oz.", "1 Cup", "1½ Cups"] },
+    ],
+    yields: [
+      { label: "5 Cups", orders: "133 orders @ 0.3 fl. oz." },
+      { label: "10 Cups", orders: "266 orders @ 0.3 fl. oz." },
+      { label: "15 Cups", orders: "400 orders @ 0.3 fl. oz." },
+    ],
+    tools: ["Stainless Steel Bowl", "Measuring Cup", "Whisk", "13.5\" Spatula", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in and dry storage to make par.",
+      "<b>PART A:</b> Portion ingredients into large enough stainless steel bowl and whisk continuously until all ingredients are <b>WELL</b> combined.",
+      "Once combined, spatula contents into appropriately sized container.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Any Day",use:"14 Days from Make Day"},
+    ],
+  },
+  {
+    id: 47,
+    name: "Croutons",
+    revised: "09/05/20",
+    prepTime: "8 min (small batch)",
+    category: "baked",
+    batches: ["Small (5 pieces)", "Medium (10 pieces)", "Large (20 pieces / 1 tray)"],
+    ingredients: [
+      { part: "A", name: "Herb Focaccia (day old or fresh)", amounts: ["5 Pieces", "10 Pieces", "20 Pieces (1 Tray)"] },
+      { part: "B", name: "Salt", amounts: ["1 Tbsp.", "2 Tbsp.", "2 Tbsp. + 1½ tsp."] },
+      { part: "B", name: "Black Pepper", amounts: ["2 tsp.", "1 Tbsp. + 1 tsp.", "1 Tbsp. + 2 tsp."] },
+      { part: "B", name: "Granulated Garlic", amounts: ["1 tsp.", "2 tsp.", "2½ tsp."] },
+      { part: "B", name: "Olive Oil", amounts: ["1 Cup", "2 Cups", "2 Cups + 4 fl. oz."] },
+    ],
+    yields: [
+      { label: "1.78 Pounds", orders: "44 orders @ 0.65 oz." },
+      { label: "3.57 Pounds", orders: "88 orders @ 0.65 oz." },
+      { label: "4.76 Pounds", orders: "117 orders @ 0.65 oz." },
+    ],
+    tools: ["Cut Glove", "Cutting Board", "Serrated Knife", "Measuring Spoons", "Measuring Cup", "Lined Sheet Pan(s)", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from dry storage to make par. Preheat convection oven to 350°F.",
+      "<b>PART A:</b> If available, use day old focaccia. Using a serrated knife, cut focaccia into 3/4\"–1\" pieces. Place on parchment lined sheet pans. <span class='warning'>Maximum 6 pieces per sheet pan.</span>",
+      "<b>PART B:</b> Portion salt, black pepper, and granulated garlic over croutons. Drizzle olive oil over croutons. Mix with gloved hands until evenly coated. Distribute in a single layer on sheet pan.",
+      "Bake at 350°F for 6–8 minutes. Adjust cook time using the color first.",
+      "Remove from oven and cool.",
+      "Cover, label, and date as indicated in shelf life table. <span class='warning'>DO NOT REFRIGERATE!</span>",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Monday"},{make:"Wednesday",use:"Tuesday"},{make:"Thursday",use:"Wednesday"},
+      {make:"Friday",use:"Thursday"},{make:"Saturday",use:"Friday"},{make:"Sunday",use:"Saturday"},{make:"Monday",use:"Sunday"}
+    ],
+  },
+  {
+    id: 48,
+    name: "Meats – Sliced (Turkey, Ham, Calabrese Salami, Taylor Ham)",
+    revised: "08/26/23",
+    prepTime: "12 min (24 portions)",
+    category: "protein",
+    batches: ["Per Piece"],
+    ingredients: [
+      { part: "A", name: "Turkey", amounts: ["4 oz. / 1/32\" slicer / 6–12 slices / avg. 8.5 lbs. = 33 orders @ 4 oz."] },
+      { part: "A", name: "Ham", amounts: ["4 oz. / 1/16\" slicer / 6–12 slices / avg. 10.5 lbs. = 42 orders @ 4 oz."] },
+      { part: "A", name: "Calabrese Salami", amounts: ["2 oz. / 1/32\" slicer / 12–14 slices / avg. 3 lbs. = 24 orders @ 2 oz."] },
+      { part: "A", name: "Club Portions (Ham 2 oz. + Turkey 2 oz.)", amounts: ["4 oz. total / avg. 3 lbs. per meat"] },
+      { part: "A", name: "Taylor Ham", amounts: ["2 oz. / 1/8\" by hand / 2–3 slices / avg. 3 lbs. = 24 orders @ 2 oz."] },
+    ],
+    yields: [
+      { label: "Varies by meat", orders: "See ingredient details above" },
+    ],
+    tools: ["Cut Glove", "Cutting Board", "Chef Knife", "Slicer", "Digital Scale", "Day Bag with Stand", "Lined Sheet Pan", "Deli Paper", "Plastic Wrap", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in to make par.",
+      "<b>PART A:</b> Remove from packaging and drain any liquid. <span class='warning'>CALABRESE SALAMI MUST BE REMOVED FROM CASING.</span>",
+      "Ham and turkey must be cut in half prior to placing on slicer. Ham is cut in half horizontally. Turkey is cut in half in the direction of the carve indicator.",
+      "Place on slicer with the cut side or widest/flattest side facing the slicer blade. Slice according to slicer standards. <span class='warning'>Slicer number is determined & recorded by the General Manager.</span>",
+      "<b>Turkey, Ham & Club Portions:</b> Place day bag on scale and set to \"0\". Portion per the weights. Sliced meat placed loosely in day bags, not stacked or folded. Lightly roll to close, do not twist tightly. Refrigerate.",
+      "<b>Taylor Ham & Calabrese Salami:</b> Place deli paper on scale and set to \"0\". Portion per the weights. Place deli paper in between each portion. <b>Taylor Ham Only — Wrap 6 portions together with plastic wrap.</b>",
+      "Label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Any Day", use:"Wed (Turkey/Ham) / Fri (Cal. Salami) / Mon (Taylor Ham)"},
+    ],
+  },
+  {
+    id: 49,
+    name: "Cream Cheese – Whipped",
+    revised: "07/18/20",
+    prepTime: "8 min (small batch)",
+    category: "spread",
+    batches: ["Small (3 lbs / 1 block)", "Medium (6 lbs / 2 blocks)", "Large (9 lbs / 3 blocks)"],
+    ingredients: [
+      { part: "A", name: "Cream Cheese", amounts: ["3 lbs. (1 each)", "6 lbs. (2 each)", "9 lbs. (3 each)"] },
+    ],
+    yields: [
+      { label: "3 Pounds", orders: "19 orders @ 2.5 oz." },
+      { label: "6 Pounds", orders: "38 orders @ 2.5 oz." },
+      { label: "9 Pounds", orders: "57 orders @ 2.5 oz." },
+    ],
+    tools: ["Cutting Board", "Chef Knife", "Food Processor", "13.5\" Spatula", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from walk-in to make par.",
+      "<b>PART A:</b> Cream cheese should sit at room temperature for 15–20 minutes before whipping in food processor.",
+      "Using a chef knife, cut cream cheese into thirds and place into food processor.",
+      "Whip cream cheese in food processor for 6–8 minutes until smooth.",
+      "Once thoroughly whipped, transfer into appropriate container.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Monday"},{make:"Wednesday",use:"Tuesday"},{make:"Thursday",use:"Wednesday"},
+      {make:"Friday",use:"Thursday"},{make:"Saturday",use:"Friday"},{make:"Sunday",use:"Saturday"},{make:"Monday",use:"Sunday"}
+    ],
+  },
+  {
+    id: 50,
+    name: "Roasted Red Bell Peppers – 1/2\" Diced",
+    revised: "05/28/22",
+    prepTime: "5 min (Recipe 1)",
+    category: "baked",
+    batches: ["Recipe 1", "Recipe 2", "Recipe 3"],
+    ingredients: [
+      { part: "A", name: "Red Bell Peppers (1/2\" diced)", amounts: ["3 lbs.", "6 lbs.", "12 lbs."] },
+      { part: "B", name: "Olive Oil", amounts: ["1.5 fl. oz.", "3 fl. oz.", "6 fl. oz."] },
+    ],
+    yields: [
+      { label: "1.7 Pounds", orders: "27 orders @ 1 oz." },
+      { label: "3.4 Pounds", orders: "54 orders @ 1 oz." },
+      { label: "6.8 Pounds", orders: "108 orders @ 1 oz." },
+    ],
+    tools: ["Cut Glove", "Cutting Board", "Chef Knife", "Easy Chopper", "1/2\" Dicer Blade", "Digital Scale", "Stainless Steel Bowl", "1.5 fl. oz. Ladle", "Lined Sheet Pan(s)", "Shelf Life Labels"],
+    steps: [
+      "Preheat convection oven to 400°F.",
+      "Retrieve enough ingredients from dry storage and walk-in to make par.",
+      "<b>PART A:</b> Trim and dice according to the Red Bell Pepper – 1/2\" Diced Prep Recipe & Procedure. Portion into appropriate size stainless steel bowl.",
+      "<b>PART B:</b> Portion into bowl and mix continuously until all ingredients are <b>WELL</b> combined.",
+      "Place red bell peppers on a parchment lined sheet pan in a single layer. <span class='warning'>Maximum 6 lb. batch per sheet pan.</span>",
+      "Bake at 400°F (17–25 min for Recipe 1; 30–45 min for Recipe 2+). Adjust using the color first. <span class='warning'>Every piece should have dark brown and/or black coloring.</span>",
+      "Remove from oven and cool completely. Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Thursday"},{make:"Wednesday",use:"Friday"},{make:"Thursday",use:"Saturday"},
+      {make:"Friday",use:"Sunday"},{make:"Saturday",use:"Monday"},{make:"Sunday",use:"Tuesday"},{make:"Monday",use:"Wednesday"}
+    ],
+  },
+  {
+    id: 51,
+    name: "Thousand Island Sauce",
+    revised: "05/22/21",
+    prepTime: "12 min (Recipe 1)",
+    category: "sauce",
+    batches: ["Recipe 1", "Recipe 2", "Recipe 3"],
+    ingredients: [
+      { part: "A", name: "Rosemary (finely chopped)", amounts: ["1 Tbsp. + 1 tsp.", "2 Tbsp. + 2 tsp.", "4 Tbsp."] },
+      { part: "B", name: "Pickles (minced)", amounts: ["8 oz.", "1 lb.", "1.5 lbs."] },
+      { part: "C", name: "Mayonnaise", amounts: ["2 Quarts", "1 Gallon", "1 Gallon + 2 Quarts"] },
+      { part: "C", name: "Ketchup", amounts: ["1.5 lbs.", "3 lbs.", "4.5 lbs."] },
+      { part: "C", name: "Granulated Garlic", amounts: ["2 tsp.", "1 Tbsp. + 1 tsp.", "2 Tbsp."] },
+      { part: "C", name: "Cayenne Pepper", amounts: ["1½ tsp.", "1 Tbsp.", "1 Tbsp. + 1½ tsp."] },
+    ],
+    yields: [
+      { label: "5.6 Pounds", orders: "90 orders @ 1 oz. (Reuben) / 45 orders @ 2 oz. (Wildflower Joe)" },
+      { label: "11.2 Pounds", orders: "179 orders @ 1 oz. / 89 orders @ 2 oz." },
+      { label: "16.8 Pounds", orders: "268 orders @ 1 oz. / 134 orders @ 2 oz." },
+    ],
+    tools: ["Cut Glove", "Cutting Board", "Chef Knife", "Stainless Steel Bowl", "Digital Scale", "Measuring Cup", "Measuring Spoons", "13.5\" Spatula", "Whisk", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Retrieve enough ingredients from dry storage and walk-in to make par.",
+      "<b>PART A:</b> Remove rosemary leaves from woody stems. Finely chop rosemary with a chef knife.",
+      "<b>PART B:</b> Using a chef knife, mince pickle into 1/16\" pieces or smaller.",
+      "<b>PART C:</b> Portion ingredients into a large enough stainless-steel bowl and add rosemary and pickles.",
+      "Whisk continuously until all ingredients are <b>WELL</b> combined.",
+      "Once thoroughly combined, spatula contents into proper container.",
+      "Cover, label, date as indicated in shelf life table and refrigerate.",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Monday"},{make:"Wednesday",use:"Tuesday"},{make:"Thursday",use:"Wednesday"},
+      {make:"Friday",use:"Thursday"},{make:"Saturday",use:"Friday"},{make:"Sunday",use:"Saturday"},{make:"Monday",use:"Sunday"}
+    ],
+  },
+  {
+    id: 52,
+    name: "Wildflower Crisps",
+    revised: "06/06/20",
+    prepTime: "8 min (small batch)",
+    category: "baked",
+    batches: ["Small Batch"],
+    ingredients: [
+      { part: "A", name: "Corn Flakes", amounts: ["10 oz."] },
+      { part: "B", name: "Liquid Eggs", amounts: ["5 fl. oz."] },
+      { part: "C", name: "Spice Blend", amounts: ["2/3 Cup"] },
+    ],
+    yields: [
+      { label: "14 Ounces", orders: "28 orders @ 0.5 oz." },
+    ],
+    tools: ["Stainless Steel Bowl", "Digital Scale", "Measuring Cup", "Lined Sheet Pan(s)", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Preheat convection oven to 325°F.",
+      "Retrieve enough ingredients from walk-in and dry storage to make par.",
+      "<b>PART A:</b> Using a digital scale portion corn flakes into appropriate size stainless steel bowl.",
+      "<b>PART B:</b> Portion liquid eggs and pour over corn flakes in bowl and toss continuously with gloved hands until all corn flakes are coated.",
+      "<b>PART C:</b> Sprinkle spice blend over corn flakes and toss continuously with gloved hands until all corn flakes are coated.",
+      "Layout wildflower crisps onto parchment lined sheet pan in a single layer. <span class='warning'>Maximum 1 batch per sheet pan.</span>",
+      "Bake at 325°F for 5–6 minutes. Cook times are a guide. Adjust cook time using the color first.",
+      "Remove from oven and cool. Transfer into appropriate container.",
+      "Cover, label, and date as indicated in table. <span class='warning'>DO NOT REFRIGERATE.</span>",
+    ],
+    shelfLife: [
+      {make:"Tuesday",use:"Monday"},{make:"Wednesday",use:"Tuesday"},{make:"Thursday",use:"Wednesday"},
+      {make:"Friday",use:"Thursday"},{make:"Saturday",use:"Friday"},{make:"Sunday",use:"Saturday"},{make:"Monday",use:"Sunday"}
+    ],
+  },
+  {
+    id: 53,
+    name: "Walnuts – Toasted & Chopped",
+    revised: "06/06/20",
+    prepTime: "8 min (small batch)",
+    category: "baked",
+    batches: ["Small (1 lb)", "Medium (2 lbs)", "Large (4 lbs)"],
+    ingredients: [
+      { part: "A", name: "Walnuts", amounts: ["1 Pound", "2 Pounds", "4 Pounds"] },
+    ],
+    yields: [
+      { label: "15 Ounces", orders: "25 orders @ 0.6 oz." },
+      { label: "1.9 Pounds", orders: "50 orders @ 0.6 oz." },
+      { label: "3.75 Pounds", orders: "100 orders @ 0.6 oz." },
+    ],
+    tools: ["Lined Sheet Pan(s)", "Cut Glove", "Cutting Board", "Chef Knife", "Container with Lid", "Shelf Life Labels"],
+    steps: [
+      "Preheat convection oven to 350°F.",
+      "Retrieve enough ingredients from dry storage to make par.",
+      "<b>PART A:</b> Portion walnuts onto parchment lined sheet pan(s) in a single layer. <span class='warning'>Maximum 2 pounds per sheet pan.</span>",
+      "Bake at 350°F for 8–10 minutes. Cook times are a guide. Adjust cook time using the color first.",
+      "Remove from oven and cool completely.",
+      "Using a chef knife, roughly chop toasted walnuts into 1/4\"–1/2\" pieces. <span class='warning'>Do not use food processor.</span>",
+      "Transfer into appropriate container. Cover, label, and date.",
+      "<span class='warning'>DO NOT REFRIGERATE. SHELF LIFE: 30 DAYS.</span>",
+    ],
+    shelfLife: [
+      {make:"Any Day",use:"30 Days from Make Day"}
+    ],
+  },
+];
+
+const ACTIVE_RECIPES = RECIPES.filter(r => !r.hidden);
+
+let currentFilter = 'all';
+let currentSearch = '';
+let openRecipes = {};
+let selectedBatch = {};
+
+function getFilteredRecipes() {
+  return ACTIVE_RECIPES.filter(r => {
+    const matchCat = currentFilter === 'all' || r.category === currentFilter;
+    const q = currentSearch.toLowerCase();
+    const matchSearch = !q || r.name.toLowerCase().includes(q) ||
+      r.ingredients.some(i => i.name.toLowerCase().includes(q)) ||
+      r.tools.some(t => t.toLowerCase().includes(q));
+    return matchCat && matchSearch;
+  });
+}
+
+function setFilter(f, el) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+function handleSearch(val) {
+  currentSearch = val;
+  document.getElementById('clearBtn').style.display = val ? 'block' : 'none';
+  render();
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  currentSearch = '';
+  document.getElementById('clearBtn').style.display = 'none';
+  render();
+}
+
+function toggleRecipe(id) {
+  openRecipes[id] = !openRecipes[id];
+  render();
+}
+
+function setBatch(id, idx) {
+  selectedBatch[id] = idx;
+  render();
+}
+
+function getTodayShelf(shelfLife) {
+  return shelfLife.find(s => s.make === TODAY);
+}
+
+function render() {
+  const filtered = getFilteredRecipes();
+  const list = document.getElementById('recipeList');
+  const countBar = document.getElementById('countBar');
+  countBar.textContent = `${filtered.length} recipe${filtered.length !== 1 ? 's' : ''}`;
+
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty-state"><div class="emoji">🔍</div><p>No recipes found.<br>Try a different search.</p></div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(r => {
+    const isOpen = !!openRecipes[r.id];
+    const batchIdx = selectedBatch[r.id] || 0;
+    const todayShelf = getTodayShelf(r.shelfLife);
+    const hasBatches = r.batches.length > 1;
+
+    const ingredientRows = r.ingredients.map(ing => `
+      <tr>
+        <td class="part-label">Pt ${ing.part}</td>
+        <td>${ing.name}</td>
+        <td><span class="ing-amount">${ing.amounts[batchIdx] || ing.amounts[0]}</span></td>
+      </tr>
+    `).join('');
+
+    const batchBtns = hasBatches ? `
+      <div class="batch-selector">
+        ${r.batches.map((b, i) => `
+          <button class="batch-btn ${i === batchIdx ? 'active' : ''}" onclick="event.stopPropagation(); setBatch(${r.id}, ${i})">${b}</button>
+        `).join('')}
+      </div>
+    ` : '';
+
+    const yieldData = r.yields[batchIdx] || r.yields[0];
+    const shelfRows = r.shelfLife.map(s => `
+      <div class="shelf-row">
+        <div class="shelf-cell ${s.make === TODAY ? 'today-make' : ''}">${s.make}${s.make === TODAY ? '<span class="today-badge">Today</span>' : ''}</div>
+        <div class="shelf-cell ${s.make === TODAY ? 'today-use' : ''}">${s.use}</div>
+      </div>
+    `).join('');
+
+    const stepsHtml = r.steps.map((s, i) => `
+      <div class="step">
+        <div class="step-num">${i + 1}</div>
+        <div class="step-text">${s}</div>
+      </div>
+    `).join('');
+
+    const toolsHtml = r.tools.map(t => `<span class="tool-tag">${t}</span>`).join('');
+
+    return `
+      <div class="recipe-card ${isOpen ? 'open' : ''}" id="card-${r.id}">
+        <div class="card-header" onclick="toggleRecipe(${r.id})">
+          <div class="card-name">${r.name}</div>
+          <div class="card-chevron">›</div>
+        </div>
+        <div class="card-meta">
+          <div class="meta-tag"><div class="dot"></div> ⏱ ${r.prepTime}</div>
+          <div class="meta-tag"><div class="dot"></div> 📅 Rev. ${r.revised}</div>
+          ${todayShelf ? `<div class="meta-tag"><div class="dot" style="background:var(--amber)"></div> Use by: <b>${todayShelf.use}</b></div>` : ''}
+        </div>
+        <div class="card-detail">
+          ${hasBatches ? `<div class="section"><div class="section-title">Batch Size</div>${batchBtns}</div>` : ''}
+
+          <div class="section">
+            <div class="section-title">Ingredients</div>
+            <table class="ing-table">
+              <thead><tr><th></th><th>Ingredient</th><th>Amount</th></tr></thead>
+              <tbody>${ingredientRows}</tbody>
+            </table>
+          </div>
+
+          ${yieldData ? `
+          <div class="section">
+            <div class="section-title">Finished Yield</div>
+            <div class="yield-box">
+              <div class="yield-big">${yieldData.label}</div>
+              <div class="yield-orders">${yieldData.orders}</div>
+            </div>
+          </div>` : ''}
+
+          <div class="section">
+            <div class="section-title">Preparation Steps</div>
+            ${stepsHtml}
+          </div>
+
+          <div class="section">
+            <div class="section-title">Shelf Life</div>
+            <div class="shelf-grid">
+              <div class="shelf-cell header">Make Day</div>
+              <div class="shelf-cell header">Use By Day</div>
+              ${shelfRows}
+            </div>
+          </div>
+
+          ${r.tools.length ? `
+          <div class="section">
+            <div class="section-title">Tools Needed</div>
+            <div class="tools-list">${toolsHtml}</div>
+          </div>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+render();
+</script>
+</body>
+</html>
