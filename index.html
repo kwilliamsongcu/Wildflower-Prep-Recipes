@@ -6,493 +6,489 @@
 <title>Wildflower Prep Recipes</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+  /*
+   * ═══════════════════════════════════════════
+   *  WILDFLOWER BRAND COLOR PALETTE
+   *  Priority order: Yellow → Blue → Orange
+   *  Black is used for text only — never backgrounds.
+   *  White is the default background everywhere.
+   * ═══════════════════════════════════════════
+   */
   :root {
-    --yellow: #DFCE20;
-    --cerulean: #0777A5;
-    --ochre: #DE7A29;
-    --bronze: #CC5908;
-    --cream: #faf7f2;
-    --warm-white: #ffffff;
-    --amber: #DE7A29;
-    --amber-light: #DFCE20;
-    --red-warn: #c0392b;
-    --text-dark: #1a1a14;
-    --text-mid: #4a4740;
-    --text-light: #8a867e;
-    --border: #e2ddd6;
-    --card-bg: #ffffff;
-    --shadow: 0 2px 12px rgba(0,0,0,0.08);
-    --shadow-lg: 0 6px 30px rgba(0,0,0,0.14);
+    --yellow: #DFCE20;      /* Primary brand color — Golden Glow. Used for header accents, yield boxes, password screen bg */
+    --blue: #0777A5;        /* Secondary brand color — Cerulean. Used for interactive elements, card titles, active states */
+    --orange: #DE7A29;      /* Tertiary brand color — Ochre. Used for step numbers, part labels, meta dots, badges */
+    --orange-dark: #CC5908; /* Darker orange — Bronze Spice. Used for button hover states */
+    --black: #111111;       /* Text color ONLY — never used as a background */
+    --text-dark: #111111;   /* Primary text — headings and body copy */
+    --text-mid: #555250;    /* Secondary text — labels, metadata */
+    --text-light: #999490;  /* Tertiary text — placeholders, section headers, helper text */
+    --border: #e8e4de;      /* Subtle border for cards, inputs, dividers */
+    --shadow: 0 2px 10px rgba(0,0,0,0.07); /* Soft card shadow */
   }
 
-  /* ── PASSWORD SCREEN ── */
+  /*
+   * ═══════════════════════════════════════════
+   *  PASSWORD / LOCK SCREEN
+   *  Full-screen overlay that appears before the app loads.
+   *  Yellow background with a white card for the form.
+   *  Hidden via JS once the correct password is entered.
+   * ═══════════════════════════════════════════
+   */
+  /* Full-screen yellow overlay — covers entire viewport on top of the app */
   #passwordScreen {
     position: fixed; inset: 0; z-index: 999;
-    background: #fff8f0;
+    background: var(--yellow);
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     padding: 32px 28px;
     font-family: 'DM Sans', sans-serif;
   }
+  /* Large Wildflower wordmark above the card */
   #passwordScreen .pw-logo {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 36px; letter-spacing: 4px;
-    color: #ffffff; margin-bottom: 4px;
+    font-size: 38px; letter-spacing: 4px;
+    color: var(--black); margin-bottom: 2px;
   }
-  #passwordScreen .pw-logo span { color: var(--yellow); }
+  /* The ✿ flower in the logo gets blue to break up the black wordmark */
+  #passwordScreen .pw-logo span { color: var(--blue); }
+  /* "Prep Recipes & Procedures" subtitle below the wordmark */
   #passwordScreen .pw-tagline {
     font-size: 10px; letter-spacing: 3px;
-    text-transform: uppercase; color: rgba(255,255,255,0.45);
-    margin-bottom: 36px;
+    text-transform: uppercase; color: rgba(17,17,17,0.5);
+    margin-bottom: 32px;
   }
+  /* White rounded card that contains the login/reset form */
   #passwordScreen .pw-box {
     width: 100%; max-width: 340px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 16px;
+    background: #ffffff;
+    border-radius: 18px;
     padding: 28px 24px 24px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
   }
+  /* Small uppercase label above each input field */
   #passwordScreen .pw-label {
     font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
-    text-transform: uppercase; color: rgba(255,255,255,0.55);
-    margin-bottom: 10px; display: block;
+    text-transform: uppercase; color: var(--text-light);
+    margin-bottom: 8px; display: block;
   }
+  /* Password and email text inputs */
   #passwordScreen input[type="password"],
   #passwordScreen input[type="text"] {
     width: 100%; padding: 13px 16px;
-    border-radius: 10px; border: 1.5px solid rgba(255,255,255,0.15);
-    background: rgba(255,255,255,0.08); color: #fff;
+    border-radius: 10px; border: 1.5px solid var(--border);
+    background: #fafafa; color: var(--black);
     font-family: 'DM Sans', sans-serif; font-size: 16px;
     outline: none; letter-spacing: 2px;
     transition: border-color 0.2s;
   }
-  #passwordScreen input:focus { border-color: var(--yellow); }
+  /* Blue border highlight when an input is focused */
+  #passwordScreen input:focus { border-color: var(--blue); }
+  /* Red error message shown when the wrong password is entered */
   #passwordScreen .pw-error {
-    color: #ff6b6b; font-size: 12px; margin-top: 8px;
+    color: #d63031; font-size: 12px; margin-top: 8px;
     min-height: 18px; display: block;
   }
+  /* Primary CTA button — orange with white text */
   #passwordScreen .pw-submit {
     width: 100%; margin-top: 16px; padding: 14px;
     border-radius: 10px; border: none; cursor: pointer;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 20px; letter-spacing: 2px;
-    background: var(--yellow); color: #1a1208;
+    background: var(--orange); color: #ffffff;
     transition: background 0.15s, transform 0.1s;
   }
-  #passwordScreen .pw-submit:active { transform: scale(0.97); background: #c9b900; }
+  /* Slightly darker orange on press for tactile feedback */
+  #passwordScreen .pw-submit:active { transform: scale(0.97); background: var(--orange-dark); }
+  /* "Forgot password?" link — blue underline text below the main button */
   #passwordScreen .pw-forgot {
     display: block; text-align: center;
-    margin-top: 16px; font-size: 12px;
-    color: var(--cerulean); cursor: pointer;
+    margin-top: 14px; font-size: 12px;
+    color: var(--blue); cursor: pointer;
     text-decoration: underline; background: none; border: none;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'DM Sans', sans-serif; font-weight: 500;
   }
-  #passwordScreen .pw-forgot:hover { color: #0999d4; }
+  /* "← Back to login" link on the reset view */
   #passwordScreen .pw-back {
     display: block; text-align: center;
     margin-top: 12px; font-size: 12px;
-    color: rgba(255,255,255,0.4); cursor: pointer;
+    color: var(--text-light); cursor: pointer;
     background: none; border: none;
     font-family: 'DM Sans', sans-serif;
   }
+  /* Each named view (login / reset / success) is hidden by default */
   .pw-view { display: none; }
+  /* Only the active view is shown — toggled by showView() in JS */
   .pw-view.active { display: block; }
+  /* Instructional paragraph on the forgot-password view */
   #passwordScreen .pw-reset-note {
-    font-size: 13px; color: rgba(255,255,255,0.6);
-    line-height: 1.6; margin-bottom: 20px; text-align: center;
+    font-size: 13px; color: var(--text-mid);
+    line-height: 1.6; margin-bottom: 18px; text-align: center;
   }
-  #passwordScreen .pw-success {
-    text-align: center; padding: 10px 0;
-  }
-  #passwordScreen .pw-success-icon {
-    font-size: 40px; margin-bottom: 12px;
-  }
-  #passwordScreen .pw-success p {
-    color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.6;
-  }
-  #passwordScreen .pw-success strong { color: var(--yellow); }
+  /* Confirmation screen shown after the reset email is "sent" */
+  #passwordScreen .pw-success { text-align: center; padding: 8px 0; }
+  #passwordScreen .pw-success-icon { font-size: 40px; margin-bottom: 12px; }
+  #passwordScreen .pw-success p { color: var(--text-mid); font-size: 14px; line-height: 1.6; }
+  /* The submitted email address is highlighted in blue on the success screen */
+  #passwordScreen .pw-success strong { color: var(--blue); }
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
   body {
     font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
+    background: #ffffff;
     color: var(--text-dark);
     min-height: 100vh;
     max-width: 480px;
     margin: 0 auto;
   }
 
+  /* ── HEADER ── */
   .header {
-    background: var(--yellow);
-    color: #1a1208;
-    padding: 18px 18px 14px;
+    background: #ffffff;
+    border-bottom: 3px solid var(--yellow);
+    padding: 14px 18px 12px;
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
   }
   .header-top {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 12px;
+    margin-bottom: 11px;
   }
   .logo-mark {
     width: 36px; height: 36px;
-    background: #1a1208;
+    background: var(--yellow);
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-    color: var(--yellow);
+    font-size: 18px; flex-shrink: 0;
+    color: var(--black);
   }
   .brand {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 24px;
-    letter-spacing: 3px;
-    line-height: 1;
-    color: #1a1208;
+    font-size: 24px; letter-spacing: 3px; line-height: 1;
+    color: var(--black);
   }
-  .brand .flower-accent { color: var(--cerulean); }
+  .brand .flower-accent { color: var(--orange); }
   .sub-brand {
-    font-size: 9px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: rgba(26,18,8,0.55);
-    margin-top: 3px;
+    font-size: 9px; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--text-light);
+    margin-top: 2px;
   }
 
+  /*
+   * SEARCH BAR — inside the sticky header.
+   * Light grey input (#f8f8f8) that turns white with a blue border when focused.
+   * The magnifying glass icon is positioned absolutely inside the input padding area.
+   * The ✕ clear button is hidden until JS detects text in the field.
+   */
   .search-bar { position: relative; }
   .search-bar input {
-    width: 100%;
-    padding: 11px 14px 11px 40px;
-    border-radius: 10px;
-    border: none;
-    background: rgba(26,18,8,0.10);
-    color: #1a1208;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    outline: none;
+    width: 100%; padding: 10px 14px 10px 38px;
+    border-radius: 10px; border: 1.5px solid var(--border);
+    background: #f8f8f8; color: var(--black);
+    font-family: 'DM Sans', sans-serif; font-size: 15px;
+    outline: none; transition: border-color 0.2s;
   }
-  .search-bar input::placeholder { color: rgba(26,18,8,0.4); }
-  .search-bar input:focus { background: rgba(26,18,8,0.15); }
+  .search-bar input::placeholder { color: var(--text-light); }
+  /* Blue border on focus matches active filter chips and other interactive states */
+  .search-bar input:focus { border-color: var(--blue); background: #ffffff; }
+  /* Magnifying glass — non-interactive, sits inside the left padding of the input */
   .search-icon {
-    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-    color: rgba(26,18,8,0.45);
-    font-size: 16px; pointer-events: none;
+    position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+    color: var(--text-light); font-size: 15px; pointer-events: none;
   }
+  /* ✕ clear button — display:none by default; JS sets display:block when input has text */
   .clear-btn {
     position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-    color: rgba(26,18,8,0.5);
-    font-size: 18px; cursor: pointer; display: none;
-    background: none; border: none;
-    line-height: 1;
+    color: var(--text-light); font-size: 18px; cursor: pointer; display: none;
+    background: none; border: none; line-height: 1;
   }
 
+  /*
+   * CATEGORY FILTER CHIPS — horizontally scrollable pill row below the header.
+   * Inactive chips are white with a grey border. Active chip turns blue.
+   * scrollbar-width:none hides the scrollbar on Firefox; -webkit- hides it on Chrome/Safari.
+   */
   .filter-row {
-    background: var(--warm-white);
+    background: #ffffff;
     padding: 10px 14px;
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
+    display: flex; gap: 7px;
+    overflow-x: auto;           /* Allows horizontal scrolling when chips overflow on small screens */
     border-bottom: 1px solid var(--border);
     scrollbar-width: none;
   }
   .filter-row::-webkit-scrollbar { display: none; }
   .filter-chip {
-    flex-shrink: 0;
-    padding: 5px 13px;
-    border-radius: 20px;
-    border: 1.5px solid var(--border);
-    background: white;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-mid);
-    cursor: pointer;
-    transition: all 0.15s;
-    white-space: nowrap;
+    flex-shrink: 0; padding: 5px 13px;
+    border-radius: 20px; border: 1.5px solid var(--border);
+    background: white; font-size: 12px; font-weight: 500;
+    color: var(--text-mid); cursor: pointer; transition: all 0.15s;
+    white-space: nowrap; /* Prevent chip text from wrapping to a second line */
   }
+  /* Active / selected category — blue background with white text */
   .filter-chip.active {
-    background: var(--cerulean);
-    border-color: var(--cerulean);
-    color: white;
+    background: var(--blue); border-color: var(--blue); color: white;
   }
 
+  /* "N recipes" count — updates dynamically as the user searches or filters */
   .count-bar {
-    padding: 10px 16px 4px;
-    font-size: 12px;
-    color: var(--text-light);
-    letter-spacing: 0.5px;
+    padding: 10px 16px 4px; font-size: 12px;
+    color: var(--text-light); letter-spacing: 0.5px;
   }
 
+  /*
+   * RECIPE LIST — vertical flex column of cards.
+   * Bottom padding (80px) leaves room above any future bottom nav bar.
+   */
   .recipe-list {
     padding: 4px 12px 80px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: flex; flex-direction: column; gap: 10px;
   }
 
+  /*
+   * RECIPE CARDS — white cards with a colored left-border accent.
+   * Yellow left border = card is collapsed. Orange = expanded (has .open class).
+   * Tapping the .card-header calls toggleRecipe() in JS to open/close.
+   */
   .recipe-card {
-    background: var(--card-bg);
-    border-radius: 14px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    cursor: pointer;
-    transition: box-shadow 0.2s, transform 0.1s;
+    background: #ffffff; border-radius: 14px;
+    box-shadow: var(--shadow); overflow: hidden;
+    cursor: pointer; transition: box-shadow 0.2s, transform 0.1s;
     border: 1px solid var(--border);
   }
+  /* Micro scale-down on tap gives a native button feel on touchscreens */
   .recipe-card:active { transform: scale(0.985); box-shadow: none; }
 
+  /* Tappable header row: recipe name on the left, › chevron on the right */
   .card-header {
     padding: 14px 16px 12px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 10px;
+    display: flex; align-items: flex-start;
+    justify-content: space-between; gap: 10px;
+    border-left: 4px solid var(--yellow); /* Yellow left stripe = closed state */
   }
+  /* Recipe name — blue Bebas Neue at the top of the brand hierarchy */
   .card-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px;
-    letter-spacing: 0.8px;
-    color: var(--cerulean);
-    line-height: 1.1;
-    flex: 1;
+    font-size: 20px; letter-spacing: 0.8px;
+    color: var(--blue); line-height: 1.1; flex: 1;
   }
+  /* › chevron — rotates 90° via CSS transition when .open is applied */
   .card-chevron {
-    color: var(--text-light);
-    font-size: 18px;
-    margin-top: 2px;
-    flex-shrink: 0;
-    transition: transform 0.25s;
+    color: var(--text-light); font-size: 18px;
+    margin-top: 2px; flex-shrink: 0; transition: transform 0.25s;
   }
   .recipe-card.open .card-chevron { transform: rotate(90deg); }
+  /* Left border shifts from yellow to orange when the card is expanded */
+  .recipe-card.open .card-header { border-left-color: var(--orange); }
 
+  /* Metadata row below the title: prep time, revision date, and today's use-by if applicable */
   .card-meta {
-    display: flex;
-    gap: 10px;
-    padding: 0 16px 13px;
-    flex-wrap: wrap;
+    display: flex; gap: 10px;
+    padding: 0 16px 13px; flex-wrap: wrap;
   }
   .meta-tag {
     display: flex; align-items: center; gap: 4px;
     font-size: 11px; color: var(--text-light); font-weight: 500;
   }
+  /* Small orange dot bullet — tertiary brand color used for decorative accents */
   .meta-tag .dot {
     width: 6px; height: 6px; border-radius: 50%;
-    background: var(--amber);
-    flex-shrink: 0;
+    background: var(--orange); flex-shrink: 0;
   }
 
+  /* Expandable detail panel — hidden by default; JS adds .open to the card to reveal it */
   .card-detail {
-    display: none;
-    border-top: 1px solid var(--border);
-    background: var(--warm-white);
+    display: none; border-top: 1px solid var(--border);
+    background: #fafafa; /* Slight grey offset to separate from the white card header */
   }
   .recipe-card.open .card-detail { display: block; }
 
-  .section {
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--border);
-  }
+  /* Each named section inside the detail panel: Ingredients, Steps, Shelf Life, Tools */
+  .section { padding: 14px 16px; border-bottom: 1px solid var(--border); }
   .section:last-child { border-bottom: none; }
+  /* Uppercase label above each section — e.g. "INGREDIENTS", "PREPARATION STEPS" */
   .section-title {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text-light);
-    margin-bottom: 10px;
+    font-size: 10px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--text-light); margin-bottom: 10px;
   }
 
-  .batch-selector {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 14px;
-  }
+  /*
+   * BATCH SIZE SELECTOR — row of toggle buttons (Recipe 1 / Recipe 2 / Recipe 3).
+   * Clicking a batch calls setBatch() which re-renders ingredient amounts and yield.
+   * Active button turns blue to match filter chips and other interactive elements.
+   */
+  .batch-selector { display: flex; gap: 6px; margin-bottom: 14px; }
   .batch-btn {
-    flex: 1;
-    padding: 8px 4px;
-    border-radius: 8px;
-    border: 1.5px solid var(--border);
-    background: white;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-mid);
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.15s;
+    flex: 1; padding: 8px 4px; border-radius: 8px;
+    border: 1.5px solid var(--border); background: white;
+    font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600;
+    color: var(--text-mid); cursor: pointer; text-align: center; transition: all 0.15s;
   }
+  /* Currently selected batch size — blue fill */
   .batch-btn.active {
-    background: var(--cerulean);
-    border-color: var(--cerulean);
-    color: white;
+    background: var(--blue); border-color: var(--blue); color: white;
   }
 
+  /*
+   * INGREDIENTS TABLE — three columns: Part | Ingredient | Amount
+   * "Pt A / Pt B" labels are orange so prep parts are easy to scan.
+   * Amounts are blue for visual consistency with other interactive/data elements.
+   */
   .ing-table { width: 100%; border-collapse: collapse; }
   .ing-table th {
-    text-align: left;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--text-light);
-    padding: 0 0 6px;
+    text-align: left; font-size: 10px; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: var(--text-light); padding: 0 0 6px;
   }
   .ing-table td {
-    padding: 7px 8px 7px 0;
-    font-size: 14px;
-    border-top: 1px solid var(--border);
-    vertical-align: top;
+    padding: 7px 8px 7px 0; font-size: 14px;
+    border-top: 1px solid var(--border); vertical-align: top;
+    color: var(--text-dark);
   }
-  .ing-table td:first-child { color: var(--text-mid); }
+  /* "Pt A" / "Pt B" — orange uppercase label; width:1% collapses the column to its content */
   .ing-table td.part-label {
     font-size: 9px; font-weight: 700; letter-spacing: 1px;
-    color: var(--amber); text-transform: uppercase;
-    white-space: nowrap; padding-right: 6px; width: 1%;
-    padding-top: 9px;
+    color: var(--orange); text-transform: uppercase;
+    white-space: nowrap; padding-right: 6px; width: 1%; padding-top: 9px;
   }
-  .ing-amount {
-    font-weight: 600; color: var(--bronze);
-    white-space: nowrap;
-  }
+  /* Portion quantities — blue and bold so they pop during fast kitchen reads */
+  .ing-amount { font-weight: 600; color: var(--blue); white-space: nowrap; }
 
+  /*
+   * YIELD BOX — yellow banner showing the finished output for the selected batch.
+   * Black text on yellow is the primary on-brand contrast pairing.
+   */
   .yield-box {
-    background: var(--cerulean);
-    color: white;
-    border-radius: 10px;
-    padding: 12px 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
+    background: var(--yellow); border-radius: 10px;
+    padding: 12px 14px; display: flex; flex-direction: column; gap: 3px;
   }
+  /* Big output quantity (e.g. "2 Pounds") — large Bebas Neue */
   .yield-big {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 26px;
-    letter-spacing: 1px;
-    line-height: 1;
-    color: var(--yellow);
+    font-family: 'Bebas Neue', sans-serif; font-size: 26px;
+    letter-spacing: 1px; line-height: 1; color: var(--black);
   }
-  .yield-orders { font-size: 12px; color: rgba(255,255,255,0.7); }
+  /* Smaller order count (e.g. "18 orders @ 1.7 oz.") below the quantity */
+  .yield-orders { font-size: 12px; color: rgba(17,17,17,0.6); }
 
-  .step {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 10px;
-    align-items: flex-start;
-  }
+  /*
+   * PREPARATION STEPS — numbered list with orange step circles.
+   * .warning class inside step text is red and bold for critical safety notes.
+   */
+  .step { display: flex; gap: 12px; margin-bottom: 10px; align-items: flex-start; }
   .step:last-child { margin-bottom: 0; }
+  /* Orange circle with white step number — orange is the tertiary brand color */
   .step-num {
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    background: var(--ochre);
-    color: white;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--orange); color: white;
     font-size: 11px; font-weight: 700;
     display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; margin-top: 1px;
+    flex-shrink: 0; margin-top: 1px; /* Slight top offset aligns number with first line of text */
   }
-  .step-text {
-    font-size: 13.5px;
-    line-height: 1.55;
-    color: var(--text-dark);
-    flex: 1;
-  }
-  .step-text .warning {
-    color: var(--red-warn);
-    font-weight: 600;
-  }
+  .step-text { font-size: 13.5px; line-height: 1.55; color: var(--text-dark); flex: 1; }
+  /* Red + bold for critical instructions — e.g. "DO NOT REFRIGERATE", "GENTLY mix" */
+  .step-text .warning { color: #d63031; font-weight: 600; }
 
+  /*
+   * SHELF LIFE TABLE — CSS grid with two equal columns: Make Day | Use By Day.
+   * Today's row gets a pale yellow highlight so kitchen staff spot it instantly.
+   * display:contents on .shelf-row collapses the wrapper so each cell sits directly in the grid.
+   */
   .shelf-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 1px solid var(--border);
+    display: grid; grid-template-columns: 1fr 1fr;
+    border-radius: 10px; overflow: hidden; border: 1px solid var(--border);
   }
+  /* display:contents removes the wrapper from the grid flow — cells pair up naturally */
   .shelf-row { display: contents; }
   .shelf-cell {
-    padding: 8px 12px;
-    font-size: 13px;
-    border-bottom: 1px solid var(--border);
-    background: white;
+    padding: 8px 12px; font-size: 13px;
+    border-bottom: 1px solid var(--border); background: white;
+    color: var(--text-dark);
   }
+  /* Column headers: "MAKE DAY" and "USE BY DAY" — light grey background */
   .shelf-cell.header {
     font-size: 10px; font-weight: 700; letter-spacing: 1px;
-    text-transform: uppercase; color: var(--text-light);
-    background: #f0ede7;
+    text-transform: uppercase; color: var(--text-light); background: #f5f5f5;
   }
-  .shelf-cell.today-make { background: #e8f4f9; font-weight: 700; color: var(--cerulean); }
-  .shelf-cell.today-use { background: #e8f4f9; font-weight: 700; color: var(--cerulean); }
+  /* Today's Make Day cell — pale yellow (#fff9cc) highlight for quick visual scanning */
+  .shelf-cell.today-make { background: #fff9cc; font-weight: 700; color: var(--black); }
+  /* Today's Use By cell — same pale yellow as Make Day for visual pairing */
+  .shelf-cell.today-use  { background: #fff9cc; font-weight: 700; color: var(--black); }
 
-  .tools-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
+  /* TOOLS LIST — wrapping row of bordered pill tags, one per tool required */
+  .tools-list { display: flex; flex-wrap: wrap; gap: 6px; }
   .tool-tag {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 5px 10px;
-    font-size: 12px;
-    color: var(--text-mid);
+    background: white; border: 1px solid var(--border);
+    border-radius: 6px; padding: 5px 10px; font-size: 12px; color: var(--text-mid);
   }
 
-  .empty-state {
-    text-align: center;
-    padding: 60px 30px;
-    color: var(--text-light);
-  }
+  /* Shown when search/filter returns zero results */
+  .empty-state { text-align: center; padding: 60px 30px; color: var(--text-light); }
   .empty-state .emoji { font-size: 40px; margin-bottom: 12px; }
   .empty-state p { font-size: 15px; }
 
+  /* Orange "Today" pill — injected via JS next to today's Make Day in the shelf life grid */
   .today-badge {
-    display: inline-block;
-    background: var(--amber);
-    color: white;
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 2px 7px;
-    border-radius: 20px;
-    margin-left: 6px;
-    vertical-align: middle;
+    display: inline-block; background: var(--orange); color: white;
+    font-size: 9px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; padding: 2px 7px;
+    border-radius: 20px; margin-left: 6px; vertical-align: middle;
   }
 </style>
 </head>
 <body>
 
+<!--
+  ═══════════════════════════════════════════════════════
+  PASSWORD SCREEN
+  Full-screen overlay shown before the app is accessible.
+  Contains three views that swap in/out via showView() in JS:
+    1. #pwLogin     — default login form
+    2. #pwReset     — forgot password / manager email form
+    3. #pwResetSent — confirmation after "sending" reset link
+  The overlay is hidden by setting display:none on #passwordScreen
+  once checkPassword() confirms the correct passphrase.
+  ═══════════════════════════════════════════════════════
+-->
 <div id="passwordScreen">
+  <!-- Wordmark and tagline above the white card -->
   <div class="pw-logo">WILDFL<span>✿</span>WER</div>
   <div class="pw-tagline">Prep Recipes &amp; Procedures</div>
+
+  <!-- White card container — holds whichever view is currently active -->
   <div class="pw-box">
 
-    <!-- LOGIN VIEW -->
+    <!-- VIEW 1: Login — shown by default (has .active class) -->
     <div class="pw-view active" id="pwLogin">
       <label class="pw-label">Team Password</label>
+      <!-- Enter key triggers checkPassword() via onkeydown for faster mobile entry -->
       <input type="password" id="pwInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPassword()">
+      <!-- Error message span — populated by JS on wrong password, cleared on success -->
       <span class="pw-error" id="pwError"></span>
       <button class="pw-submit" onclick="checkPassword()">ENTER KITCHEN</button>
+      <!-- Switches to the #pwReset view when tapped -->
       <button class="pw-forgot" onclick="showView('pwReset')">Forgot password?</button>
     </div>
 
-    <!-- FORGOT PASSWORD VIEW -->
+    <!-- VIEW 2: Forgot Password — manager email entry -->
     <div class="pw-view" id="pwReset">
       <p class="pw-reset-note">Enter your manager's email and we'll send password reset instructions to them.</p>
       <label class="pw-label">Manager Email</label>
       <input type="text" id="pwEmail" placeholder="manager@wildflower.com" onkeydown="if(event.key==='Enter')sendReset()">
       <span class="pw-error" id="pwEmailError"></span>
       <button class="pw-submit" onclick="sendReset()">SEND RESET LINK</button>
+      <!-- Back button returns to login view without clearing the form -->
       <button class="pw-back" onclick="showView('pwLogin')">← Back to login</button>
     </div>
 
-    <!-- SUCCESS VIEW -->
+    <!-- VIEW 3: Reset Confirmation — shown after a valid email is submitted -->
     <div class="pw-view" id="pwResetSent">
       <div class="pw-success">
         <div class="pw-success-icon">✉️</div>
+        <!-- #pwEmailSent is populated by JS with the email the user entered -->
         <p>Reset instructions sent to<br><strong id="pwEmailSent"></strong>.<br><br>Check with your manager to get back in.</p>
       </div>
       <button class="pw-submit" style="margin-top:24px" onclick="showView('pwLogin')">BACK TO LOGIN</button>
@@ -501,21 +497,39 @@
   </div>
 </div>
 
+<!--
+  ═══════════════════════════════════════════════════════
+  STICKY HEADER
+  Always visible at the top. Contains:
+  - Logo circle + Wildflower wordmark + tagline
+  - Live search input that filters the recipe list as you type
+  ═══════════════════════════════════════════════════════
+-->
 <div class="header">
+  <!-- Logo row: yellow circle icon + brand text block -->
   <div class="header-top">
     <div class="logo-mark">✿</div>
     <div>
+      <!-- WILDFL✿WER wordmark — flower character gets .flower-accent (orange) color -->
       <div class="brand">WILDFL<span class="flower-accent">✿</span>WER</div>
       <div class="sub-brand">Eat. Sip. Enjoy. &nbsp;·&nbsp; Prep Recipes &amp; Procedures</div>
     </div>
   </div>
+  <!-- Search input — oninput fires handleSearch() on every keystroke -->
   <div class="search-bar">
     <span class="search-icon">🔍</span>
     <input type="text" id="searchInput" placeholder="Search recipes or ingredients…" oninput="handleSearch(this.value)">
+    <!-- ✕ clear button — hidden until JS detects text in the field -->
     <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
   </div>
 </div>
 
+<!--
+  CATEGORY FILTER CHIPS
+  Each chip calls setFilter() with its category string.
+  "All" is active by default (shows every recipe).
+  Horizontal overflow allows scrolling to reach all categories on small screens.
+-->
 <div class="filter-row" id="filterRow">
   <div class="filter-chip active" onclick="setFilter('all', this)">All</div>
   <div class="filter-chip" onclick="setFilter('sauce', this)">Sauces</div>
@@ -532,13 +546,42 @@
   <div class="filter-chip" onclick="setFilter('seafood', this)">Seafood</div>
 </div>
 
+<!-- Dynamic count — updated by render() each time filters or search change -->
 <div class="count-bar" id="countBar">52 recipes</div>
+
+<!-- Recipe cards are injected here by the render() function -->
 <div class="recipe-list" id="recipeList"></div>
 
 <script>
-// ── PASSWORD GATE ──
-const CORRECT_PASSWORD = 'prepteam'; // change this to the real team password
+/*
+ * ═══════════════════════════════════════════════════════════════
+ *  WILDFLOWER PREP RECIPES — App JavaScript
+ *
+ *  Structure:
+ *    1. PASSWORD GATE    — lock screen logic
+ *    2. APP STATE        — today's day, open cards, selected batches
+ *    3. RECIPE DATA      — full RECIPES array (all recipe objects)
+ *    4. FILTER / SEARCH  — getFilteredRecipes, setFilter, handleSearch
+ *    5. RENDER           — builds and injects all card HTML into the DOM
+ * ═══════════════════════════════════════════════════════════════
+ */
 
+
+/* ─────────────────────────────────────────────
+   1. PASSWORD GATE
+   ───────────────────────────────────────────── */
+
+// The team passphrase — change this string to update the password for all users.
+// Comparison is case-insensitive (val.toLowerCase() === CORRECT_PASSWORD).
+const CORRECT_PASSWORD = 'prepteam';
+
+/**
+ * checkPassword()
+ * Called when the user taps "ENTER KITCHEN" or presses Enter in the password field.
+ * Compares the input (lowercased) against CORRECT_PASSWORD.
+ * On success: hides the #passwordScreen overlay.
+ * On failure: shows an error message and clears the input for another attempt.
+ */
 function checkPassword() {
   const val = document.getElementById('pwInput').value;
   const err = document.getElementById('pwError');
@@ -548,16 +591,34 @@ function checkPassword() {
   } else {
     err.textContent = 'Incorrect password. Try again.';
     document.getElementById('pwInput').value = '';
-    document.getElementById('pwInput').focus();
+    document.getElementById('pwInput').focus(); // Return focus so the user can try again immediately
   }
 }
 
+/**
+ * showView(id)
+ * Switches between the three password-screen views:
+ *   'pwLogin'     — main login form
+ *   'pwReset'     — forgot-password / manager email form
+ *   'pwResetSent' — confirmation screen after submitting an email
+ * Removes .active from all .pw-view elements, then adds it to the target view.
+ * Also clears any stale email error message each time a view swap happens.
+ */
 function showView(id) {
   document.querySelectorAll('.pw-view').forEach(v => v.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  document.getElementById('pwEmailError').textContent = '';
+  document.getElementById('pwEmailError').textContent = ''; // Clear previous error on navigation
 }
 
+/**
+ * sendReset()
+ * Called when the user submits the forgot-password form.
+ * Validates that the input looks like an email address (contains "@").
+ * On success: copies the email to the confirmation screen and switches to #pwResetSent.
+ * On failure: shows an inline error asking for a valid address.
+ *
+ * NOTE: This is UI-only — no actual email is sent. Hook up a backend/service here if needed.
+ */
 function sendReset() {
   const email = document.getElementById('pwEmail').value.trim();
   const err = document.getElementById('pwEmailError');
@@ -565,13 +626,50 @@ function sendReset() {
     err.textContent = 'Please enter a valid email address.';
     return;
   }
-  document.getElementById('pwEmailSent').textContent = email;
+  document.getElementById('pwEmailSent').textContent = email; // Display the address on success screen
   showView('pwResetSent');
 }
 
-// ── APP ──
+
+/* ─────────────────────────────────────────────
+   2. APP STATE
+   ───────────────────────────────────────────── */
+
+// Resolves today's day name (e.g. "Thursday") used to highlight the correct shelf-life row.
 const TODAY = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];
 
+// Currently active category filter — 'all' shows every recipe.
+let currentFilter = 'all';
+
+// Current search query string — empty string means no active search.
+let currentSearch = '';
+
+// Tracks which recipe cards are expanded. Keys are recipe IDs, values are booleans.
+// e.g. { 1: true, 5: false } means recipe 1 is open, recipe 5 is closed.
+let openRecipes = {};
+
+// Tracks the selected batch index per recipe. Keys are recipe IDs, values are 0-based indexes.
+// e.g. { 1: 2 } means recipe 1 is showing its third batch size (index 2).
+let selectedBatch = {};
+
+
+
+/* ─────────────────────────────────────────────
+   3. RECIPE DATA
+   Full list of all prep recipes. Each object has:
+     id        — unique numeric ID (used as the card's DOM id and state key)
+     name      — display name shown on the card header
+     revised   — last revision date shown in card metadata
+     prepTime  — estimated prep time for the smallest batch
+     category  — string matching a filter chip value (e.g. 'sauce', 'spread', 'produce')
+     hidden    — optional boolean; if true, recipe is excluded from ACTIVE_RECIPES
+     batches   — array of batch size labels (e.g. ["Recipe 1", "Recipe 2", "Recipe 3"])
+     ingredients — array of { part, name, amounts[] } where amounts[i] maps to batches[i]
+     yields    — array of { label, orders } — one entry per batch size
+     tools     — array of equipment strings displayed as pill tags
+     steps     — array of HTML strings for each preparation step
+     shelfLife — array of { make, use } day pairs for the shelf life table
+   ───────────────────────────────────────────── */
 const RECIPES = [
   {
     id: 1,
@@ -2229,13 +2327,26 @@ const RECIPES = [
   },
 ];
 
+// Excludes any recipe with hidden:true from the displayed list.
+// Hidden recipes stay in the array for reference but won't appear in the UI.
 const ACTIVE_RECIPES = RECIPES.filter(r => !r.hidden);
 
-let currentFilter = 'all';
-let currentSearch = '';
-let openRecipes = {};
-let selectedBatch = {};
 
+/* ─────────────────────────────────────────────
+   4. FILTER / SEARCH FUNCTIONS
+   ───────────────────────────────────────────── */
+
+/**
+ * getFilteredRecipes()
+ * Returns the subset of ACTIVE_RECIPES that match BOTH the active category
+ * filter AND the current search query.
+ *
+ * Category match: passes if currentFilter is 'all', or the recipe's category
+ *   string equals currentFilter.
+ *
+ * Search match: passes if the search query is empty, OR if the query appears
+ *   in the recipe name, any ingredient name, or any tool name (all lowercased).
+ */
 function getFilteredRecipes() {
   return ACTIVE_RECIPES.filter(r => {
     const matchCat = currentFilter === 'all' || r.category === currentFilter;
@@ -2247,6 +2358,14 @@ function getFilteredRecipes() {
   });
 }
 
+/**
+ * setFilter(f, el)
+ * Called by each filter chip's onclick.
+ * Updates currentFilter, removes .active from all chips, adds it to the tapped chip,
+ * then re-renders the list.
+ * @param {string} f  — category string (e.g. 'sauce', 'spread', 'all')
+ * @param {Element} el — the chip DOM element that was tapped
+ */
 function setFilter(f, el) {
   currentFilter = f;
   document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
@@ -2254,12 +2373,23 @@ function setFilter(f, el) {
   render();
 }
 
+/**
+ * handleSearch(val)
+ * Fired on every keystroke in the search input (oninput).
+ * Updates currentSearch, shows/hides the ✕ clear button, and re-renders.
+ * @param {string} val — current value of the search input
+ */
 function handleSearch(val) {
   currentSearch = val;
   document.getElementById('clearBtn').style.display = val ? 'block' : 'none';
   render();
 }
 
+/**
+ * clearSearch()
+ * Resets the search input and currentSearch state, hides the clear button,
+ * and re-renders the full list. Called by the ✕ button.
+ */
 function clearSearch() {
   document.getElementById('searchInput').value = '';
   currentSearch = '';
@@ -2267,37 +2397,86 @@ function clearSearch() {
   render();
 }
 
+/**
+ * toggleRecipe(id)
+ * Flips the open/closed state of a recipe card in the openRecipes map,
+ * then re-renders so the card detail panel shows or hides.
+ * @param {number} id — recipe ID
+ */
 function toggleRecipe(id) {
   openRecipes[id] = !openRecipes[id];
   render();
 }
 
+/**
+ * setBatch(id, idx)
+ * Sets the selected batch index for a recipe, then re-renders.
+ * This updates which ingredient amounts and yield label are displayed.
+ * event.stopPropagation() on the button prevents the card from toggling closed.
+ * @param {number} id  — recipe ID
+ * @param {number} idx — 0-based index into the recipe's batches / yields / ingredient amounts arrays
+ */
 function setBatch(id, idx) {
   selectedBatch[id] = idx;
   render();
 }
 
+/**
+ * getTodayShelf(shelfLife)
+ * Finds the shelf life entry whose make day matches today's day name.
+ * Returns the matching {make, use} object, or undefined if not found.
+ * Used to highlight today's row in the shelf life grid and show the
+ * "Use by: [day]" tag in the card metadata.
+ * @param {Array} shelfLife — array of {make, use} day objects from a recipe
+ */
 function getTodayShelf(shelfLife) {
   return shelfLife.find(s => s.make === TODAY);
 }
 
+
+/* ─────────────────────────────────────────────
+   5. RENDER FUNCTION
+   The main DOM update function. Called after any state change.
+   Builds the full HTML for all matching recipe cards and injects
+   it into #recipeList in one innerHTML assignment for performance.
+   ───────────────────────────────────────────── */
+
+/**
+ * render()
+ * Reads current filter/search state, gets filtered recipes, updates the count bar,
+ * and builds + injects all card HTML. If no recipes match, shows the empty state.
+ *
+ * For each recipe, it builds:
+ *   - ingredientRows  — <tr> rows for the selected batch
+ *   - batchBtns       — batch selector buttons (only if recipe has >1 batch)
+ *   - yieldData       — yield label + orders string for the selected batch
+ *   - shelfRows       — shelf life grid rows with today's row highlighted
+ *   - stepsHtml       — numbered step divs
+ *   - toolsHtml       — tool pill tags
+ * All of these are combined into a single card template string per recipe.
+ */
 function render() {
   const filtered = getFilteredRecipes();
   const list = document.getElementById('recipeList');
   const countBar = document.getElementById('countBar');
+
+  // Update the "N recipes" count above the list
   countBar.textContent = `${filtered.length} recipe${filtered.length !== 1 ? 's' : ''}`;
 
+  // If no recipes match, show the empty state and stop
   if (!filtered.length) {
     list.innerHTML = `<div class="empty-state"><div class="emoji">🔍</div><p>No recipes found.<br>Try a different search.</p></div>`;
     return;
   }
 
   list.innerHTML = filtered.map(r => {
-    const isOpen = !!openRecipes[r.id];
-    const batchIdx = selectedBatch[r.id] || 0;
-    const todayShelf = getTodayShelf(r.shelfLife);
-    const hasBatches = r.batches.length > 1;
+    const isOpen = !!openRecipes[r.id];               // Is this card currently expanded?
+    const batchIdx = selectedBatch[r.id] || 0;        // Which batch size is selected (default 0)?
+    const todayShelf = getTodayShelf(r.shelfLife);    // Today's shelf life entry (or undefined)
+    const hasBatches = r.batches.length > 1;          // Only show batch selector if >1 batch option
 
+    // Build ingredient table rows — amounts[batchIdx] gives the right quantity for the selected batch.
+    // Falls back to amounts[0] if the selected batch index doesn't have an entry.
     const ingredientRows = r.ingredients.map(ing => `
       <tr>
         <td class="part-label">Pt ${ing.part}</td>
@@ -2306,6 +2485,8 @@ function render() {
       </tr>
     `).join('');
 
+    // Build batch toggle buttons — each calls setBatch() with its index.
+    // event.stopPropagation() prevents the click from also toggling the card open/closed.
     const batchBtns = hasBatches ? `
       <div class="batch-selector">
         ${r.batches.map((b, i) => `
@@ -2314,7 +2495,11 @@ function render() {
       </div>
     ` : '';
 
+    // Pick the yield entry for the active batch (falls back to yields[0] if batch has no entry)
     const yieldData = r.yields[batchIdx] || r.yields[0];
+
+    // Build shelf life grid rows — today's row gets .today-make / .today-use classes
+    // and an orange "Today" badge injected next to the day name
     const shelfRows = r.shelfLife.map(s => `
       <div class="shelf-row">
         <div class="shelf-cell ${s.make === TODAY ? 'today-make' : ''}">${s.make}${s.make === TODAY ? '<span class="today-badge">Today</span>' : ''}</div>
@@ -2322,6 +2507,7 @@ function render() {
       </div>
     `).join('');
 
+    // Build numbered step divs — step numbers start at 1 (i + 1)
     const stepsHtml = r.steps.map((s, i) => `
       <div class="step">
         <div class="step-num">${i + 1}</div>
@@ -2329,8 +2515,11 @@ function render() {
       </div>
     `).join('');
 
+    // Build tool pill tags
     const toolsHtml = r.tools.map(t => `<span class="tool-tag">${t}</span>`).join('');
 
+    // Full card template — .open class on the wrapper controls detail panel visibility
+    // and the left-border color transition (yellow → orange) via CSS
     return `
       <div class="recipe-card ${isOpen ? 'open' : ''}" id="card-${r.id}">
         <div class="card-header" onclick="toggleRecipe(${r.id})">
@@ -2340,7 +2529,7 @@ function render() {
         <div class="card-meta">
           <div class="meta-tag"><div class="dot"></div> ⏱ ${r.prepTime}</div>
           <div class="meta-tag"><div class="dot"></div> 📅 Rev. ${r.revised}</div>
-          ${todayShelf ? `<div class="meta-tag"><div class="dot" style="background:var(--amber)"></div> Use by: <b>${todayShelf.use}</b></div>` : ''}
+          ${todayShelf ? `<div class="meta-tag"><div class="dot" style="background:var(--orange)"></div> Use by: <b>${todayShelf.use}</b></div>` : ''}
         </div>
         <div class="card-detail">
           ${hasBatches ? `<div class="section"><div class="section-title">Batch Size</div>${batchBtns}</div>` : ''}
@@ -2387,6 +2576,7 @@ function render() {
   }).join('');
 }
 
+// Initial render on page load — populates the recipe list with all active recipes
 render();
 </script>
 </body>
