@@ -7,22 +7,110 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --green: #1a4a2e;
-    --green-mid: #2d6e47;
-    --green-light: #4caf7a;
-    --cream: #f5f0e8;
-    --warm-white: #faf8f4;
-    --amber: #d4831a;
-    --amber-light: #f0a830;
+    --yellow: #DFCE20;
+    --cerulean: #0777A5;
+    --ochre: #DE7A29;
+    --bronze: #CC5908;
+    --cream: #faf7f2;
+    --warm-white: #ffffff;
+    --amber: #DE7A29;
+    --amber-light: #DFCE20;
     --red-warn: #c0392b;
     --text-dark: #1a1a14;
-    --text-mid: #4a4a3a;
-    --text-light: #8a8a7a;
-    --border: #ddd8cc;
+    --text-mid: #4a4740;
+    --text-light: #8a867e;
+    --border: #e2ddd6;
     --card-bg: #ffffff;
-    --shadow: 0 2px 12px rgba(26,74,46,0.10);
-    --shadow-lg: 0 6px 30px rgba(26,74,46,0.15);
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 6px 30px rgba(0,0,0,0.14);
   }
+
+  /* ── PASSWORD SCREEN ── */
+  #passwordScreen {
+    position: fixed; inset: 0; z-index: 999;
+    background: #1a1208;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 32px 28px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  #passwordScreen .pw-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px; letter-spacing: 4px;
+    color: #ffffff; margin-bottom: 4px;
+  }
+  #passwordScreen .pw-logo span { color: var(--yellow); }
+  #passwordScreen .pw-tagline {
+    font-size: 10px; letter-spacing: 3px;
+    text-transform: uppercase; color: rgba(255,255,255,0.45);
+    margin-bottom: 36px;
+  }
+  #passwordScreen .pw-box {
+    width: 100%; max-width: 340px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 28px 24px 24px;
+  }
+  #passwordScreen .pw-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase; color: rgba(255,255,255,0.55);
+    margin-bottom: 10px; display: block;
+  }
+  #passwordScreen input[type="password"],
+  #passwordScreen input[type="text"] {
+    width: 100%; padding: 13px 16px;
+    border-radius: 10px; border: 1.5px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.08); color: #fff;
+    font-family: 'DM Sans', sans-serif; font-size: 16px;
+    outline: none; letter-spacing: 2px;
+    transition: border-color 0.2s;
+  }
+  #passwordScreen input:focus { border-color: var(--yellow); }
+  #passwordScreen .pw-error {
+    color: #ff6b6b; font-size: 12px; margin-top: 8px;
+    min-height: 18px; display: block;
+  }
+  #passwordScreen .pw-submit {
+    width: 100%; margin-top: 16px; padding: 14px;
+    border-radius: 10px; border: none; cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px; letter-spacing: 2px;
+    background: var(--yellow); color: #1a1208;
+    transition: background 0.15s, transform 0.1s;
+  }
+  #passwordScreen .pw-submit:active { transform: scale(0.97); background: #c9b900; }
+  #passwordScreen .pw-forgot {
+    display: block; text-align: center;
+    margin-top: 16px; font-size: 12px;
+    color: var(--cerulean); cursor: pointer;
+    text-decoration: underline; background: none; border: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+  #passwordScreen .pw-forgot:hover { color: #0999d4; }
+  #passwordScreen .pw-back {
+    display: block; text-align: center;
+    margin-top: 12px; font-size: 12px;
+    color: rgba(255,255,255,0.4); cursor: pointer;
+    background: none; border: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .pw-view { display: none; }
+  .pw-view.active { display: block; }
+  #passwordScreen .pw-reset-note {
+    font-size: 13px; color: rgba(255,255,255,0.6);
+    line-height: 1.6; margin-bottom: 20px; text-align: center;
+  }
+  #passwordScreen .pw-success {
+    text-align: center; padding: 10px 0;
+  }
+  #passwordScreen .pw-success-icon {
+    font-size: 40px; margin-bottom: 12px;
+  }
+  #passwordScreen .pw-success p {
+    color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.6;
+  }
+  #passwordScreen .pw-success strong { color: var(--yellow); }
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
@@ -36,13 +124,13 @@
   }
 
   .header {
-    background: var(--green);
-    color: var(--cream);
-    padding: 20px 18px 16px;
+    background: var(--yellow);
+    color: #1a1208;
+    padding: 18px 18px 14px;
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
   }
   .header-top {
     display: flex;
@@ -52,25 +140,27 @@
   }
   .logo-mark {
     width: 36px; height: 36px;
-    background: var(--amber);
+    background: #1a1208;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 18px;
     flex-shrink: 0;
+    color: var(--yellow);
   }
   .brand {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 1.5px;
+    font-size: 24px;
+    letter-spacing: 3px;
     line-height: 1;
+    color: #1a1208;
   }
-  .brand span { color: var(--amber-light); }
+  .brand .flower-accent { color: var(--cerulean); }
   .sub-brand {
-    font-size: 10px;
-    letter-spacing: 2px;
+    font-size: 9px;
+    letter-spacing: 3px;
     text-transform: uppercase;
-    color: rgba(245,240,232,0.65);
-    margin-top: 2px;
+    color: rgba(26,18,8,0.55);
+    margin-top: 3px;
   }
 
   .search-bar { position: relative; }
@@ -79,22 +169,22 @@
     padding: 11px 14px 11px 40px;
     border-radius: 10px;
     border: none;
-    background: rgba(255,255,255,0.13);
-    color: var(--cream);
+    background: rgba(26,18,8,0.10);
+    color: #1a1208;
     font-family: 'DM Sans', sans-serif;
     font-size: 15px;
     outline: none;
   }
-  .search-bar input::placeholder { color: rgba(245,240,232,0.5); }
-  .search-bar input:focus { background: rgba(255,255,255,0.2); }
+  .search-bar input::placeholder { color: rgba(26,18,8,0.4); }
+  .search-bar input:focus { background: rgba(26,18,8,0.15); }
   .search-icon {
     position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-    color: rgba(245,240,232,0.55);
+    color: rgba(26,18,8,0.45);
     font-size: 16px; pointer-events: none;
   }
   .clear-btn {
     position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-    color: rgba(245,240,232,0.6);
+    color: rgba(26,18,8,0.5);
     font-size: 18px; cursor: pointer; display: none;
     background: none; border: none;
     line-height: 1;
@@ -124,8 +214,8 @@
     white-space: nowrap;
   }
   .filter-chip.active {
-    background: var(--green);
-    border-color: var(--green);
+    background: var(--cerulean);
+    border-color: var(--cerulean);
     color: white;
   }
 
@@ -165,7 +255,7 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: 20px;
     letter-spacing: 0.8px;
-    color: var(--green);
+    color: var(--cerulean);
     line-height: 1.1;
     flex: 1;
   }
@@ -190,7 +280,7 @@
   }
   .meta-tag .dot {
     width: 6px; height: 6px; border-radius: 50%;
-    background: var(--green-light);
+    background: var(--amber);
     flex-shrink: 0;
   }
 
@@ -235,8 +325,8 @@
     transition: all 0.15s;
   }
   .batch-btn.active {
-    background: var(--green);
-    border-color: var(--green);
+    background: var(--cerulean);
+    border-color: var(--cerulean);
     color: white;
   }
 
@@ -264,12 +354,12 @@
     padding-top: 9px;
   }
   .ing-amount {
-    font-weight: 600; color: var(--green);
+    font-weight: 600; color: var(--bronze);
     white-space: nowrap;
   }
 
   .yield-box {
-    background: var(--green);
+    background: var(--cerulean);
     color: white;
     border-radius: 10px;
     padding: 12px 14px;
@@ -282,9 +372,9 @@
     font-size: 26px;
     letter-spacing: 1px;
     line-height: 1;
-    color: var(--amber-light);
+    color: var(--yellow);
   }
-  .yield-orders { font-size: 12px; color: rgba(255,255,255,0.75); }
+  .yield-orders { font-size: 12px; color: rgba(255,255,255,0.7); }
 
   .step {
     display: flex;
@@ -296,7 +386,7 @@
   .step-num {
     width: 22px; height: 22px;
     border-radius: 50%;
-    background: var(--green);
+    background: var(--ochre);
     color: white;
     font-size: 11px; font-weight: 700;
     display: flex; align-items: center; justify-content: center;
@@ -333,8 +423,8 @@
     text-transform: uppercase; color: var(--text-light);
     background: #f0ede7;
   }
-  .shelf-cell.today-make { background: #e8f4ee; font-weight: 700; color: var(--green); }
-  .shelf-cell.today-use { background: #e8f4ee; font-weight: 700; color: var(--green); }
+  .shelf-cell.today-make { background: #e8f4f9; font-weight: 700; color: var(--cerulean); }
+  .shelf-cell.today-use { background: #e8f4f9; font-weight: 700; color: var(--cerulean); }
 
   .tools-list {
     display: flex;
@@ -375,12 +465,48 @@
 </head>
 <body>
 
+<div id="passwordScreen">
+  <div class="pw-logo">WILDFL<span>✿</span>WER</div>
+  <div class="pw-tagline">Prep Recipes &amp; Procedures</div>
+  <div class="pw-box">
+
+    <!-- LOGIN VIEW -->
+    <div class="pw-view active" id="pwLogin">
+      <label class="pw-label">Team Password</label>
+      <input type="password" id="pwInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPassword()">
+      <span class="pw-error" id="pwError"></span>
+      <button class="pw-submit" onclick="checkPassword()">ENTER KITCHEN</button>
+      <button class="pw-forgot" onclick="showView('pwReset')">Forgot password?</button>
+    </div>
+
+    <!-- FORGOT PASSWORD VIEW -->
+    <div class="pw-view" id="pwReset">
+      <p class="pw-reset-note">Enter your manager's email and we'll send password reset instructions to them.</p>
+      <label class="pw-label">Manager Email</label>
+      <input type="text" id="pwEmail" placeholder="manager@wildflower.com" onkeydown="if(event.key==='Enter')sendReset()">
+      <span class="pw-error" id="pwEmailError"></span>
+      <button class="pw-submit" onclick="sendReset()">SEND RESET LINK</button>
+      <button class="pw-back" onclick="showView('pwLogin')">← Back to login</button>
+    </div>
+
+    <!-- SUCCESS VIEW -->
+    <div class="pw-view" id="pwResetSent">
+      <div class="pw-success">
+        <div class="pw-success-icon">✉️</div>
+        <p>Reset instructions sent to<br><strong id="pwEmailSent"></strong>.<br><br>Check with your manager to get back in.</p>
+      </div>
+      <button class="pw-submit" style="margin-top:24px" onclick="showView('pwLogin')">BACK TO LOGIN</button>
+    </div>
+
+  </div>
+</div>
+
 <div class="header">
   <div class="header-top">
-    <div class="logo-mark">🌸</div>
+    <div class="logo-mark">✿</div>
     <div>
-      <div class="brand">WILDFL<span>🌸</span>WER</div>
-      <div class="sub-brand">Prep Recipes &amp; Procedures</div>
+      <div class="brand">WILDFL<span class="flower-accent">✿</span>WER</div>
+      <div class="sub-brand">Eat. Sip. Enjoy. &nbsp;·&nbsp; Prep Recipes &amp; Procedures</div>
     </div>
   </div>
   <div class="search-bar">
@@ -410,6 +536,40 @@
 <div class="recipe-list" id="recipeList"></div>
 
 <script>
+// ── PASSWORD GATE ──
+const CORRECT_PASSWORD = 'prepteam'; // change this to the real team password
+
+function checkPassword() {
+  const val = document.getElementById('pwInput').value;
+  const err = document.getElementById('pwError');
+  if (val.toLowerCase() === CORRECT_PASSWORD) {
+    document.getElementById('passwordScreen').style.display = 'none';
+    err.textContent = '';
+  } else {
+    err.textContent = 'Incorrect password. Try again.';
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwInput').focus();
+  }
+}
+
+function showView(id) {
+  document.querySelectorAll('.pw-view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('pwEmailError').textContent = '';
+}
+
+function sendReset() {
+  const email = document.getElementById('pwEmail').value.trim();
+  const err = document.getElementById('pwEmailError');
+  if (!email || !email.includes('@')) {
+    err.textContent = 'Please enter a valid email address.';
+    return;
+  }
+  document.getElementById('pwEmailSent').textContent = email;
+  showView('pwResetSent');
+}
+
+// ── APP ──
 const TODAY = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];
 
 const RECIPES = [
